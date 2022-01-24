@@ -7,7 +7,12 @@ if (envFileFound.error) throw new Error('Please provide an .env file.');
 
 export default {
   PORT: parseInt(process.env.PORT as string, 10),
-  DB_URI: process.env.DB_URI,
+
+  // database
+  DB_HOST: process.env.DB_HOST,
+  DB_USERNAME: process.env.DB_USERNAME,
+  DB_PASSWORD: process.env.DB_PASSWORD,
+  DB_NAME: process.env.DB_NAME,
 
   // winston logger configs
   LOGS: {

@@ -27,6 +27,7 @@
 
     /* Type Checking */
     "strict": true /* Enable all strict type-checking options. */,
+    "strictPropertyInitialization": false /* Check for class properties that are declared but not set in the constructor. */,
 
     /* Experimental Options */
     "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,

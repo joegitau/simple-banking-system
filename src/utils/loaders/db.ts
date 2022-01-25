@@ -1,7 +1,8 @@
 import { createConnection } from 'typeorm';
 
+import { Client } from '../../api/entities/Client.entity';
+import { Banker } from '../../api/entities/Banker.entity';
 import config from '../../config';
-import { Client } from '../../api/entities/client.entity';
 
 const databaseConnection = async () => {
   const { DB_HOST, DB_PASSWORD, DB_USERNAME, DB_NAME } = config;
@@ -13,7 +14,7 @@ const databaseConnection = async () => {
     username: DB_USERNAME,
     password: DB_PASSWORD,
     database: DB_NAME,
-    entities: [Client],
+    entities: [Client, Banker],
     synchronize: true,
   });
 };

@@ -1,27 +1,14 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+
+import { Person } from './common/Person.entity';
 
 @Entity('client')
-export class Client extends BaseEntity {
-  @PrimaryColumn({ type: 'uuid' })
-  id: string;
-
-  @Column()
-  firstname: string;
-
-  @Column()
-  lastname: string;
-
-  @Column({ unique: true })
-  email: string;
-
+export class Client extends Person {
   @Column({ unique: true, length: 10 })
   card_number: string;
 
   @Column({ type: 'numeric' })
-  balance: number;
-
-  @Column({ default: true, name: 'active' })
-  is_active: boolean;
+  account_balance: number;
 
   @Column({ type: 'simple-json', nullable: true })
   additional_info: {

@@ -26,6 +26,7 @@ export class Transaction extends BaseEntity {
   amount: number;
 
   @ManyToOne(() => Client, (client) => client.transactions)
-  @JoinColumn({ name: 'client_id' })
+  // @JoinColumn({ name: 'client_id' })
+  @JoinColumn()
   client: Client;
 }

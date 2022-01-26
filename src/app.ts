@@ -1,7 +1,9 @@
+import 'reflect-metadata';
+
 import express from 'express';
 
-import config from './config';
 import Logger from './utils/logger';
+import config from './config';
 
 const initApp = async () => {
   const app = express();

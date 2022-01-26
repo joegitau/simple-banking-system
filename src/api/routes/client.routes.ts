@@ -1,20 +1,9 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import { Router } from 'express';
 
-import Logger from '../../utils/logger';
+import { createClientController } from '../controllers/client.controller';
 
-const router = Router();
+const route = Router();
 
-export default (app: Router) => {
-  app.use('/clients', router);
+route.post('/', createClientController);
 
-  router.post('/', async (req: Request, res: Response, next: NextFunction) => {
-    Logger.debug('Calling Clients end-point with body: %o', req.body);
-
-    try {
-      res.status(201).json('Nice!');
-    } catch (e: any) {
-      Logger.error('error: %o', e);
-      return next(e);
-    }
-  });
-};
+export default route;

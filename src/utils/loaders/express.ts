@@ -8,7 +8,7 @@ const expressLoader = (app: Application): void => {
   app.use(express.json());
 
   // API routes
-  app.use('/api', routes());
+  app.use('/api', routes);
 };
 
 export default expressLoader;

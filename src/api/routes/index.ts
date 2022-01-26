@@ -1,12 +1,11 @@
 import { Router } from 'express';
 
 import clientRoutes from './client.routes';
+import bankerRoutes from './banker.routes';
 
-export default () => {
-  const router: Router = Router();
+const routes: Router = Router();
 
-  // register all routes
-  clientRoutes(router);
+routes.use('/clients', clientRoutes);
+routes.use('/bankers', bankerRoutes);
 
-  return router;
-};
+export default routes;

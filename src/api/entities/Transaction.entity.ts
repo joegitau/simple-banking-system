@@ -1,11 +1,13 @@
 import {
   BaseEntity,
+  BeforeInsert,
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { v4 as uuid } from 'uuid';
 
 import { Client } from './Client.entity';
 
@@ -19,6 +21,9 @@ export class Transaction extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'uuid' })
+  uuid: string;
+
   @Column({ type: 'enum', enum: TransactionTypes })
   type: string;
 
@@ -29,4 +34,9 @@ export class Transaction extends BaseEntity {
   // @JoinColumn({ name: 'client_id' })
   @JoinColumn()
   client: Client;
+
+  @BeforeInsert()
+  createUuid() {
+    this.uuid = uuid();
+  }
 }

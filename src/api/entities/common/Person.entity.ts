@@ -1,16 +1,20 @@
 import {
   BaseEntity,
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-
+import { v4 as uuid } from 'uuid';
 @Entity()
 export class Person extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: string;
+
+  @Column({ type: 'uuid' })
+  uuid: string;
 
   @Column()
   firstname: string;
@@ -29,4 +33,9 @@ export class Person extends BaseEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  createUuid() {
+    this.uuid = uuid();
+  }
 }

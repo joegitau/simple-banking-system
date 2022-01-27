@@ -4,13 +4,13 @@ import { Banker } from './Banker.entity';
 import { Transaction } from './Transaction.entity';
 import { Person } from './common/Person.entity';
 
-@Entity('client')
+@Entity('clients')
 export class Client extends Person {
   @Column({ unique: true, length: 10 })
-  card_number: string;
+  cardNumber: string;
 
   @Column({ type: 'numeric' })
-  account_balance: number;
+  balance: number;
 
   @OneToMany(() => Transaction, (transaction) => transaction.client)
   transactions: Transaction[];
@@ -19,9 +19,9 @@ export class Client extends Person {
   bankers: Banker[];
 
   @Column({ type: 'simple-json', nullable: true })
-  additional_info: {
-    next_of_kin: string;
-    marital_status: string;
+  additionalInfo: {
+    nextOfKin: string;
+    maritalStatus: string;
   };
 
   @Column({ type: 'simple-array', default: [] })

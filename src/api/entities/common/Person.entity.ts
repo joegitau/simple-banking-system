@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 @Entity()
-export class Person extends BaseEntity {
+export abstract class Person extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: string;
 
@@ -25,17 +25,22 @@ export class Person extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
-  @Column({ default: true, name: 'active' })
-  is_active: boolean;
+  @Column({ default: true })
+  active: boolean;
 
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updated_at: Date;
+  updatedAt: Date;
 
   @BeforeInsert()
   createUuid() {
     this.uuid = uuid();
+  }
+
+  // override toJSON() to discard Entitiy Id
+  toJSON() {
+    return { ...this, id: undefined };
   }
 }

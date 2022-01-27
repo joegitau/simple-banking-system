@@ -3,10 +3,10 @@ import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { Person } from './common/Person.entity';
 import { Client } from './Client.entity';
 
-@Entity('banker')
+@Entity('bankers')
 export class Banker extends Person {
   @Column({ unique: true, length: 10 })
-  employee_number: string;
+  employeeNumber: string;
 
   @ManyToMany(() => Client)
   @JoinTable({

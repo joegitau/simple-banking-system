@@ -3,10 +3,14 @@ import { Banker } from './Banker.entity';
 
 import { Transaction } from './Transaction.entity';
 import { Person } from './common/Person.entity';
+import { IsNumber, Max, Min } from 'class-validator';
 
 @Entity('clients')
 export class Client extends Person {
-  @Column({ unique: true, length: 10 })
+  @Column({ unique: true })
+  @IsNumber()
+  @Min(10, { message: 'Card number cannot have less than 10 digits.' })
+  @Max(10, { message: 'Card number cannot be greater than 10 digits.' })
   cardNumber: string;
 
   @Column({ type: 'numeric' })

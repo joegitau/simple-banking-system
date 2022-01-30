@@ -4,25 +4,32 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+import { IsEmail, IsString } from 'class-validator';
 @Entity()
 export abstract class Person extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: string;
+  id?: string;
 
   @Column({ type: 'uuid' })
+  @Index()
   uuid: string;
 
   @Column()
+  @IsString()
   firstname: string;
 
   @Column()
+  @IsString()
   lastname: string;
 
-  @Column({ unique: true })
+  @Column()
+  @Index({ unique: true })
+  @IsEmail({}, { message: 'Invalid email address.' })
   email: string;
 
   @Column({ default: true })
@@ -40,7 +47,7 @@ export abstract class Person extends BaseEntity {
   }
 
   // override toJSON() to discard Entitiy Id
-  toJSON() {
-    return { ...this, id: undefined };
-  }
+  // toJSON() {
+  //   return { ...this, id: undefined };
+  // }
 }

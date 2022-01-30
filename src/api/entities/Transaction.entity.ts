@@ -3,6 +3,7 @@ import {
   BeforeInsert,
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -22,6 +23,7 @@ export class Transaction extends BaseEntity {
   id: number;
 
   @Column({ type: 'uuid' })
+  @Index()
   uuid: string;
 
   @Column({ type: 'enum', enum: TransactionTypes })

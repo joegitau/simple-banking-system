@@ -14,7 +14,7 @@ const expressLoader = (app: Application): void => {
 
   // handle errors
   app.use(
-    (err: ErrorHandler, _: Request, res: Response, next: NextFunction) => {
+    (err: ErrorHandler, _req: Request, res: Response, _next: NextFunction) => {
       Logger.error('Error: %o', err.message);
       handleError(err, res);
     }

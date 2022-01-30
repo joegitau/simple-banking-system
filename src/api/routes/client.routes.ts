@@ -3,7 +3,7 @@ import { Router } from 'express';
 import {
   createClientController,
   deleteClientController,
-  fetchClientsController,
+  getClientsController,
   getClientController,
   updateClientController,
 } from '../controllers/client.controller';
@@ -11,9 +11,9 @@ import {
 const route = Router();
 
 route.post('/', createClientController);
-route.get('/', fetchClientsController);
+route.get('/', getClientsController);
 route.get('/:uuid', getClientController);
 route.put('/:uuid', updateClientController);
-route.put('/:uuid', deleteClientController);
+route.delete('/:uuid', deleteClientController);
 
 export default route;

@@ -1,30 +1,53 @@
-import e, { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 
-import { Banker } from '../entities/Banker.entity';
 import Logger from '../../utils/logger';
+import { BankerService } from '../../api/services/banker.service';
 
-export const createBankerController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  Logger.debug('Creating Banker with body: %o', req.body);
+export default class BankerController {
+  protected bankerServiceInstance = new BankerService();
 
-  try {
-    // dude, we gotta add validation!
-    const { firstname, lastname, email, employeeNumber } = req.body;
-    const banker = Banker.create({
-      firstname,
-      lastname,
-      email,
-      employee_number: employeeNumber,
-    });
+  async createBanker(req: Request, res: Response) {
+    Logger.debug('Creating Banker with body: %o', req.body);
 
-    await banker.save();
-
-    return res.status(201).json(banker);
-  } catch (e: any) {
-    Logger.error(e);
-    return next(e);
+    try {
+      const banker = await this.bankerServiceInstance.createBanker(req.body);
+      return res.status(201).json(banker);
+    } catch (e: any) {
+      Logger.error(e);
+    }
   }
-};
+
+  async getBanker(req: Request, res: Response) {
+    const { uuid } = req.params;
+
+    try {
+      const banker = this.bankerServiceInstance.getBankerByUuid(uuid);
+      res.json(banker);
+    } catch (e: any) {
+      Logger.error('Error %o', e.details);
+    }
+  }
+
+  async getBankers(req: Request, res: Response) {
+    try {
+      const bankers = await this.bankerServiceInstance.getBankers();
+      res.json(bankers);
+    } catch (e: any) {
+      Logger.error('Error %o', e.details);
+    }
+  }
+
+  async updateBanker(req: Request, res: Response) {
+    try {
+      const { uuid } = req.params;
+
+      const updatedBanker = this.bankerServiceInstance.updateBanker(
+        uuid,
+        req.body
+      );
+      res.json(updatedBanker);
+    } catch (e: any) {
+      Logger.error('Error %o', e.details);
+    }
+  }
+}

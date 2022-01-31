@@ -1,7 +1,6 @@
 import { ObjectLiteral, RemoveOptions } from 'typeorm';
 
 import { Client } from '../entities/Client.entity';
-
 export class ClientService {
   // Create
   async createClient(input: ObjectLiteral): Promise<Client> {

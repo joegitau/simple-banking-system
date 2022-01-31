@@ -48,23 +48,9 @@ export const getClientsController = async (req: Request, res: Response) => {
 
 export const updateClientController = async (req: Request, res: Response) => {
   const { uuid } = req.params;
-  const { firstname, lastname, email, cardNumber, balance, hobbies } = req.body;
 
   try {
-    // const client = await Client.findOneOrFail({ uuid });
-
-    /* client.firstname = firstname || client.firstname;
-    client.lastname = lastname || client.lastname;
-    client.email = email || client.email;
-    client.cardNumber = cardNumber || client.cardNumber;
-    client.balance = balance || client.balance;
-    client.hobbies = hobbies || client.hobbies;
-
-    await client.save(); */
-
-    // const clientInstance = new ClientService();
     const updatedClient = await clientInstance.updateClient(uuid, req.body);
-
     return res.json(updatedClient);
   } catch (e: any) {
     Logger.error('Error: %o', e.detail);

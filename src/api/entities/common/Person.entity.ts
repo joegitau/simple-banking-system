@@ -1,6 +1,7 @@
 import {
   BaseEntity,
   BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -44,6 +45,11 @@ export abstract class Person extends BaseEntity {
   @BeforeInsert()
   createUuid() {
     this.uuid = uuid();
+  }
+
+  @BeforeUpdate()
+  updateDates() {
+    this.updatedAt = new Date();
   }
 
   // override toJSON() to discard Entitiy Id

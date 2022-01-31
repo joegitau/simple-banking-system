@@ -1,4 +1,4 @@
-import { DeepPartial, ObjectLiteral } from 'typeorm';
+import { ObjectLiteral, RemoveOptions } from 'typeorm';
 
 import { Client } from '../entities/Client.entity';
 
@@ -22,22 +22,31 @@ export class ClientService {
   }
 
   // Update
-  // async updateClient(
-  //   uuid: string,
-  //   fields: ObjectLiteral
-  // ): Promise<Client> {
-  //   const updateableFields: DeepPartial<Client> = {};
+  async updateClient(uuid: string, fields: ObjectLiteral): Promise<Client> {
+    const client = await Client.findOneOrFail({ uuid });
 
-  //   const client = await Client.findOneOrFail({ uuid });
+    // Object.keys(fields).forEach((key) => {
+    //   if (!!fields[key]) {
+    //     client[key] = fields[key];
+    //   }
+    // });
 
-  //   Object.keys(updateableFields).forEach((key) => {
-  //     if (!!fields[key]) {
-  //       client[key] = fields[key];
-  //     }
-  //   });
-  // }
+    Client.merge(client, fields);
+    const updatedClient = await Client.save(client);
+
+    return updatedClient;
+  }
 
   // Delete
+  async removeClient(
+    uuid: string,
+    removeOptions?: RemoveOptions
+  ): Promise<string> {
+    const client = await Client.findOneOrFail({ uuid });
+    client.remove(removeOptions);
+
+    return client.uuid;
+  }
 
   // Utility
   hasKey<O>(obj: O, key: string | number | symbol): key is keyof O {

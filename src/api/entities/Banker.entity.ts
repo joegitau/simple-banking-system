@@ -12,11 +12,11 @@ export class Banker extends Person {
   @JoinTable({
     name: 'bankers_clients',
     joinColumn: {
-      name: 'banker',
+      name: 'bankers',
       referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: 'client',
+      name: 'clients',
       referencedColumnName: 'id',
     },
   })

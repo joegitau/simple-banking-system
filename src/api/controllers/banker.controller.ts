@@ -4,13 +4,14 @@ import Logger from '../../utils/logger';
 import { BankerService } from '../../api/services/banker.service';
 
 export default class BankerController {
-  protected bankerServiceInstance = new BankerService();
+  bankerServiceInstance = new BankerService();
 
   async createBanker(req: Request, res: Response) {
-    Logger.debug('Creating Banker with body: %o', req.body);
-
     try {
-      const banker = await this.bankerServiceInstance.createBanker(req.body);
+      const bankerServiceInstance = new BankerService();
+      const banker = await bankerServiceInstance.createBanker(req.body);
+
+      Logger.debug('Created Banker with uuid: %o', banker?.uuid);
       return res.status(201).json(banker);
     } catch (e: any) {
       Logger.error(e);
@@ -21,7 +22,9 @@ export default class BankerController {
     const { uuid } = req.params;
 
     try {
-      const banker = this.bankerServiceInstance.getBankerByUuid(uuid);
+      const bankerServiceInstance = new BankerService();
+      const banker = await bankerServiceInstance.getBankerByUuid(uuid);
+
       res.json(banker);
     } catch (e: any) {
       Logger.error('Error %o', e.details);
@@ -30,7 +33,9 @@ export default class BankerController {
 
   async getBankers(req: Request, res: Response) {
     try {
-      const bankers = await this.bankerServiceInstance.getBankers();
+      const bankerServiceInstance = new BankerService();
+      const bankers = await bankerServiceInstance.getBankers();
+
       res.json(bankers);
     } catch (e: any) {
       Logger.error('Error %o', e.details);
@@ -41,10 +46,13 @@ export default class BankerController {
     try {
       const { uuid } = req.params;
 
-      const updatedBanker = this.bankerServiceInstance.updateBanker(
+      const bankerServiceInstance = new BankerService();
+      const updatedBanker = await bankerServiceInstance.updateBanker(
         uuid,
         req.body
       );
+
+      Logger.debug('Updating Banker with uuid: %o', updatedBanker?.uuid);
       res.json(updatedBanker);
     } catch (e: any) {
       Logger.error('Error %o', e.details);

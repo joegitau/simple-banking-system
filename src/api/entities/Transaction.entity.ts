@@ -12,12 +12,12 @@ import { v4 as uuid } from 'uuid';
 
 import { Client } from './Client.entity';
 
-enum TransactionTypes {
+export enum TransactionType {
   DEPOSIT = 'deposit',
   WITHDRAW = 'withdraw',
 }
 
-@Entity('transaction')
+@Entity('transactions')
 export class Transaction extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -26,7 +26,7 @@ export class Transaction extends BaseEntity {
   @Index()
   uuid: string;
 
-  @Column({ type: 'enum', enum: TransactionTypes })
+  @Column({ type: 'enum', enum: TransactionType })
   type: string;
 
   @Column({ type: 'numeric' })

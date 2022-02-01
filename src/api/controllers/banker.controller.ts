@@ -2,10 +2,9 @@ import { Request, Response } from 'express';
 
 import Logger from '../../utils/logger';
 import { BankerService } from '../../api/services/banker.service';
+import { SuccessMessages } from '../../utils/helpers/success-messages';
 
 export default class BankerController {
-  bankerServiceInstance = new BankerService();
-
   async createBanker(req: Request, res: Response) {
     try {
       const bankerServiceInstance = new BankerService();
@@ -56,6 +55,28 @@ export default class BankerController {
       res.json(updatedBanker);
     } catch (e: any) {
       Logger.error('Error %o', e.details);
+    }
+  }
+
+  async connectBankerToClient(req: Request, res: Response) {
+    try {
+      const { bankerUuid, clientUuid } = req.params;
+      Logger.info('banker & client UUIDs %o', { bankerUuid, clientUuid });
+
+      const bankerServiceInstance = new BankerService();
+      await bankerServiceInstance.connectBankerToClient(bankerUuid, clientUuid);
+
+      Logger.debug(
+        SuccessMessages.BANKER_CLIENT_CONNECTED(bankerUuid, clientUuid)
+      );
+      res.json({
+        message: SuccessMessages.BANKER_CLIENT_CONNECTED(
+          bankerUuid,
+          clientUuid
+        ),
+      });
+    } catch (e: any) {
+      Logger.error('Error %o', e);
     }
   }
 }

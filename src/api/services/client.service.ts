@@ -11,7 +11,7 @@ export class ClientService {
   }
 
   // getClient
-  async getClient(uuid: string): Promise<Client> {
+  async getClientByUuid(uuid: string): Promise<Client> {
     return await Client.findOneOrFail({ uuid });
   }
 

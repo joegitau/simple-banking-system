@@ -1,5 +1,9 @@
 import { DeepPartial, ObjectLiteral, RemoveOptions } from 'typeorm';
+
+import Logger from '../../utils/logger';
+import { ClientService } from './client.service';
 import { Banker } from '../../api/entities/Banker.entity';
+import { ErrorMessage } from '../../utils/helpers/error-messages';
 
 export class BankerService {
   async createBanker(input: ObjectLiteral): Promise<Banker> {
@@ -29,6 +33,21 @@ export class BankerService {
     updatedBanker.save();
 
     return updatedBanker;
+  }
+
+  async connectBankerToClient(bankerUuid: string, clientUuid: string) {
+    const banker = await this.getBankerByUuid(bankerUuid);
+
+    const clientServiceInstance = new ClientService();
+    const client = await clientServiceInstance.getClientByUuid(clientUuid);
+
+    if (!banker || !client) {
+      Logger.error(ErrorMessage.NO_CLIENT_OR_BANKER_EXISTS);
+      return false;
+    }
+
+    banker.clients = [client];
+    banker.save();
   }
 
   async removeBanker(

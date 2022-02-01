@@ -28,7 +28,7 @@ export const getClientController = async (req: Request, res: Response) => {
   const { uuid } = req.params;
 
   try {
-    const client = await clientInstance.getClient(uuid);
+    const client = await clientInstance.getClientByUuid(uuid);
     return res.json(client);
   } catch (e: any) {
     Logger.error('Error: %o', e.detail);

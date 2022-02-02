@@ -1,6 +1,7 @@
-import { ObjectLiteral, RemoveOptions } from 'typeorm';
+import { DeleteResult, ObjectLiteral, RemoveOptions } from 'typeorm';
 
 import { Client } from '../entities/Client.entity';
+import Logger from '../../utils/logger';
 export class ClientService {
   // Create
   async createClient(input: ObjectLiteral): Promise<Client> {
@@ -37,22 +38,9 @@ export class ClientService {
   }
 
   // Delete
-  async removeClient(
-    uuid: string,
-    removeOptions?: RemoveOptions
-  ): Promise<string> {
-    const client = await Client.findOneOrFail({ uuid });
-    client.remove(removeOptions);
+  async deleteClient(uuid: string) {
+    const client = await this.getClientByUuid(uuid);
 
-    return client.uuid;
-  }
-
-  // Utility
-  hasKey<O>(obj: O, key: string | number | symbol): key is keyof O {
-    return key in obj;
-  }
-
-  getProperty<T, K extends keyof T>(obj: T, propertyName: K): T[K] {
-    return obj[propertyName]; // o[propertyName] is of type T[K]
+    return await Client.delete(client.id);
   }
 }

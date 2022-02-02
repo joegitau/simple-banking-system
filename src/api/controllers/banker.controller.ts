@@ -13,7 +13,7 @@ export default class BankerController {
       Logger.debug('Created Banker with uuid: %o', banker?.uuid);
       return res.status(201).json(banker);
     } catch (e: any) {
-      Logger.error(e);
+      Logger.error('Error %o', e.message);
     }
   }
 
@@ -26,7 +26,7 @@ export default class BankerController {
 
       res.json(banker);
     } catch (e: any) {
-      Logger.error('Error %o', e.details);
+      Logger.error('Error %o', e.message);
     }
   }
 
@@ -37,7 +37,7 @@ export default class BankerController {
 
       res.json(bankers);
     } catch (e: any) {
-      Logger.error('Error %o', e.details);
+      Logger.error('Error %o', e.message);
     }
   }
 
@@ -54,7 +54,7 @@ export default class BankerController {
       Logger.debug('Updating Banker with uuid: %o', updatedBanker?.uuid);
       res.json(updatedBanker);
     } catch (e: any) {
-      Logger.error('Error %o', e.details);
+      Logger.error('Error %o', e.message);
     }
   }
 
@@ -76,7 +76,7 @@ export default class BankerController {
         ),
       });
     } catch (e: any) {
-      Logger.error('Error %o', e);
+      Logger.error('Error %o', e.message);
     }
   }
 }

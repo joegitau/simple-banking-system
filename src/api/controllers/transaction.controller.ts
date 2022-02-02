@@ -18,7 +18,7 @@ export default class TransactionController {
       Logger.debug('Creating a Transaction for Client with uuid: %o', clientUuid);
       return res.status(201).json(transaction);
     } catch (e: any) {
-      Logger.error('Error %o', e);
+      Logger.error('Error %o', e.message);
     }
   }
 }

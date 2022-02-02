@@ -14,7 +14,7 @@ import { IsEmail, IsString } from 'class-validator';
 @Entity()
 export abstract class Person extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id?: string;
+  id: string;
 
   @Column({ type: 'uuid' })
   @Index()

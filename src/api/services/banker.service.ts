@@ -1,4 +1,4 @@
-import { DeepPartial, ObjectLiteral, RemoveOptions } from 'typeorm';
+import { DeepPartial, DeleteResult, ObjectLiteral } from 'typeorm';
 
 import Logger from '../../utils/logger';
 import { ClientService } from './client.service';
@@ -50,13 +50,9 @@ export class BankerService {
     banker.save();
   }
 
-  async removeBanker(
-    reference: string,
-    removeOptions: RemoveOptions
-  ): Promise<string> {
-    const banker = await Banker.findOneOrFail({ uuid: reference });
+  async deleteBanker(uuid: string): Promise<DeleteResult> {
+    const banker = await this.getBankerByUuid(uuid);
 
-    const removedBanker = Banker.remove(banker, removeOptions);
-    return (await removedBanker).uuid;
+    return await Banker.delete(banker.id);
   }
 }

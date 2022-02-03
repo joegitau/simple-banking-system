@@ -24,18 +24,18 @@ export default class BankerController {
       const bankerServiceInstance = new BankerService();
       const banker = await bankerServiceInstance.getBankerByUuid(uuid);
 
-      res.json(banker);
+      return res.json(banker);
     } catch (e: any) {
       Logger.error('Error %o', e.message);
     }
   }
 
-  async getBankers(req: Request, res: Response) {
+  async getBankers(_: Request, res: Response) {
     try {
       const bankerServiceInstance = new BankerService();
       const bankers = await bankerServiceInstance.getBankers();
 
-      res.json(bankers);
+      return res.json(bankers);
     } catch (e: any) {
       Logger.error('Error %o', e.message);
     }
@@ -52,7 +52,7 @@ export default class BankerController {
       );
 
       Logger.debug('Updating Banker with uuid: %o', updatedBanker?.uuid);
-      res.json(updatedBanker);
+      return res.json(updatedBanker);
     } catch (e: any) {
       Logger.error('Error %o', e.message);
     }
@@ -69,12 +69,27 @@ export default class BankerController {
       Logger.debug(
         SuccessMessages.BANKER_CLIENT_CONNECTED(bankerUuid, clientUuid)
       );
-      res.json({
+      return res.json({
         message: SuccessMessages.BANKER_CLIENT_CONNECTED(
           bankerUuid,
           clientUuid
         ),
       });
+    } catch (e: any) {
+      Logger.error('Error %o', e.message);
+    }
+  }
+
+  async deleteBanker(req: Request, res: Response) {
+    const { uuid } = req.params;
+
+    try {
+      const bankerServiceInstance = new BankerService();
+
+      const deleteResult = await bankerServiceInstance.deleteBanker(uuid);
+
+      Logger.debug('Deleted Client with uuid: %o', uuid);
+      return res.json(deleteResult);
     } catch (e: any) {
       Logger.error('Error %o', e.message);
     }

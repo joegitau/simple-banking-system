@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import Logger from '../../utils/logger';
 import { TransactionService } from '../../api/services/transaction.service';
 
 export default class TransactionController {
-  async createTransaction(req: Request, res: Response) {
+  async createTransaction(req: Request, res: Response, next: NextFunction) {
     try {
       const { clientUuid } = req.params;
 
@@ -18,7 +18,7 @@ export default class TransactionController {
       Logger.debug('Creating a Transaction for Client with uuid: %o', clientUuid);
       return res.status(201).json(transaction);
     } catch (e: any) {
-      Logger.error('Error %o', e.message);
+      next(e);
     }
   }
 }

@@ -3,7 +3,11 @@ import cors from 'cors';
 
 import Logger from '../logger';
 import routes from '../../api/routes';
-import { ErrorHandler, handleError } from '../../utils/helpers/error-handler';
+import {
+  ErrorHandler,
+  handleError,
+  handleNotFoundErr,
+} from '../../utils/helpers/error-handler';
 
 const expressLoader = (app: Application): void => {
   app.use(cors());
@@ -13,9 +17,10 @@ const expressLoader = (app: Application): void => {
   app.use('/api', routes);
 
   // handle errors
+  app.use(handleNotFoundErr);
   app.use(
     (err: ErrorHandler, _req: Request, res: Response, _next: NextFunction) => {
-      Logger.error('Error: %o', err.message);
+      Logger.error('Error: %o', err);
       handleError(err, res);
     }
   );

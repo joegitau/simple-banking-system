@@ -10,7 +10,7 @@ const clientServiceInstance = new ClientService();
 export const createClientController = async (
   req: Request,
   res: Response,
-  _: NextFunction
+  next: NextFunction
 ) => {
   try {
     const client = await clientServiceInstance.createClient(req.body);
@@ -18,37 +18,42 @@ export const createClientController = async (
     Logger.debug('Created Client with uuid: %o', client?.uuid);
     return res.status(201).json(client);
   } catch (e: any) {
-    Logger.error('Error: %o', e.message);
-    // throw new ErrorHandler(401, ErrorMessage.CLIENT_EXISTS);
-    // return next(e);
+    next(e);
   }
 };
 
-export const getClientController = async (req: Request, res: Response) => {
+export const getClientController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { uuid } = req.params;
 
   try {
     const client = await clientServiceInstance.getClientByUuid(uuid);
     return res.json(client);
   } catch (e: any) {
-    Logger.error('Error: %o', e.message);
-    // throw new ErrorHandler(401, ErrorMessage.NO_CLIENT_EXIST(uuid));
+    next(e);
   }
 };
 
-export const getClientsController = async (req: Request, res: Response) => {
+export const getClientsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const clients = await clientServiceInstance.getClients();
     return res.json(clients);
   } catch (e: any) {
-    Logger.error('Error: %o', e.message);
-    // throw new ErrorHandler(401, ErrorMessage.NO_CLIENTS_EXIST);
+    next(e);
   }
 };
 
 export const getClientAndTransactionsByQBController = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
   try {
     const { uuid } = req.params;
@@ -63,14 +68,15 @@ export const getClientAndTransactionsByQBController = async (
 
     res.json(client);
   } catch (e: any) {
-    Logger.error('Error: %o', e.message);
+    next(e);
   }
 };
 
 // FIXME - for some reason not working!
 export const getClientBankersByQBController = async (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
   try {
     const { uuid } = req.params;
@@ -82,11 +88,15 @@ export const getClientBankersByQBController = async (
 
     res.json(client);
   } catch (e: any) {
-    Logger.error('Error: %o', e.message);
+    next(e);
   }
 };
 
-export const updateClientController = async (req: Request, res: Response) => {
+export const updateClientController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { uuid } = req.params;
 
   try {
@@ -98,12 +108,15 @@ export const updateClientController = async (req: Request, res: Response) => {
     Logger.debug('Updating Client with uuid: %o', updatedClient?.uuid);
     return res.json(updatedClient);
   } catch (e: any) {
-    Logger.error('Error: %o', e.message);
-    // throw new ErrorHandler(401, ErrorMessage.NO_CLIENT_EXIST(uuid));
+    next(e);
   }
 };
 
-export const deleteClientController = async (req: Request, res: Response) => {
+export const deleteClientController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { uuid } = req.params;
 
   try {
@@ -112,7 +125,6 @@ export const deleteClientController = async (req: Request, res: Response) => {
     Logger.debug('Deleted Client with uuid: %o', uuid);
     return res.json(deleteResult);
   } catch (e: any) {
-    Logger.error('Error: %o', e.message);
-    // throw new ErrorHandler(401, ErrorMessage.NO_CLIENT_EXIST(uuid));
+    next(e);
   }
 };

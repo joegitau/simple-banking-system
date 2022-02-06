@@ -2,7 +2,7 @@ import { createQueryBuilder, ObjectLiteral } from 'typeorm';
 
 import { Client } from '../entities/Client.entity';
 import { SearchQueryOptions } from './common/query-builder-options';
-export class ClientService {
+class ClientService {
   async createClient(input: ObjectLiteral): Promise<Client> {
     const client: Client = Client.create(input);
     await client.save();
@@ -56,3 +56,5 @@ export class ClientService {
     return await Client.delete(client.id);
   }
 }
+
+export default new ClientService();

@@ -1,26 +1,17 @@
 import { Router } from 'express';
 
-import validateRequest from '../../api/middleware/validate-request';
 import { clientCreator } from '../validators/client.validator';
-
-import {
-  createClientController,
-  deleteClientController,
-  getClientsController,
-  getClientController,
-  updateClientController,
-  getClientAndTransactionsByQBController,
-  getClientBankersByQBController,
-} from '../controllers/client.controller';
+import ClientController from '../controllers/client.controller';
+import validateRequest from '../../api/middleware/validate-request';
 
 const route = Router();
 
-route.post('/', validateRequest(clientCreator), createClientController);
-route.get('/', getClientsController);
-// route.get('/:uuid', getClientController);
-route.get('/:uuid', getClientAndTransactionsByQBController);
-// route.get('/:uuid', getClientBankersByQBController);
-route.put('/:uuid', updateClientController);
-route.delete('/:uuid', deleteClientController);
+route.post('/', validateRequest(clientCreator), ClientController.createClient);
+route.get('/', ClientController.getClients);
+// route.get('/:uuid', ClientController.getClient);
+route.get('/:uuid', ClientController.getClientAndTransactionsByQB);
+// route.get('/:uuid', ClientController.getClientBankersByQB);
+route.put('/:uuid', ClientController.updateClient);
+route.delete('/:uuid', ClientController.deleteClient);
 
 export default route;

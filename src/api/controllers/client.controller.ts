@@ -1,130 +1,103 @@
 import { Request, Response, NextFunction } from 'express';
 
 import Logger from '../../utils/logger';
-import { ClientService } from '../services/client.service';
+import ClientService from '../services/client.service';
 import { TransactionType } from '../../api/entities/Transaction.entity';
 import { SearchQueryOptions } from '../../api/services/common/query-builder-options';
 
-const clientServiceInstance = new ClientService();
+class ClientController {
+  async createClient(req: Request, res: Response, next: NextFunction) {
+    try {
+      const client = await ClientService.createClient(req.body);
 
-export const createClientController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const client = await clientServiceInstance.createClient(req.body);
-
-    Logger.debug('Created Client with uuid: %o', client?.uuid);
-    return res.status(201).json(client);
-  } catch (e: any) {
-    next(e);
+      Logger.debug('Created Client with uuid: %o', client?.uuid);
+      return res.status(201).json(client);
+    } catch (e: any) {
+      next(e);
+    }
   }
-};
 
-export const getClientController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { uuid } = req.params;
-
-  try {
-    const client = await clientServiceInstance.getClientByUuid(uuid);
-    return res.json(client);
-  } catch (e: any) {
-    next(e);
-  }
-};
-
-export const getClientsController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const clients = await clientServiceInstance.getClients();
-    return res.json(clients);
-  } catch (e: any) {
-    next(e);
-  }
-};
-
-export const getClientAndTransactionsByQBController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+  async getClient(req: Request, res: Response, next: NextFunction) {
     const { uuid } = req.params;
-    const queryOptions: SearchQueryOptions = {
-      uuid,
-      transactionType: TransactionType.DEPOSIT,
-    };
 
-    const client = await clientServiceInstance.getCientAndTransactionsQB(
-      queryOptions
-    );
-
-    res.json(client);
-  } catch (e: any) {
-    next(e);
+    try {
+      const client = await ClientService.getClientByUuid(uuid);
+      return res.json(client);
+    } catch (e: any) {
+      next(e);
+    }
   }
-};
 
-// FIXME - for some reason not working!
-export const getClientBankersByQBController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+  async getClients(req: Request, res: Response, next: NextFunction) {
+    try {
+      const clients = await ClientService.getClients();
+      return res.json(clients);
+    } catch (e: any) {
+      next(e);
+    }
+  }
+
+  async getClientAndTransactionsByQB(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { uuid } = req.params;
+      const queryOptions: SearchQueryOptions = {
+        uuid,
+        transactionType: TransactionType.DEPOSIT,
+      };
+
+      const client = await ClientService.getCientAndTransactionsQB(
+        queryOptions
+      );
+
+      res.json(client);
+    } catch (e: any) {
+      next(e);
+    }
+  }
+
+  // FIXME - for some reason not working!
+  async getClientBankersByQB(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { uuid } = req.params;
+      const queryOptions: SearchQueryOptions = { uuid };
+
+      const client = await ClientService.getClientAndBankersQB(queryOptions);
+
+      res.json(client);
+    } catch (e: any) {
+      next(e);
+    }
+  }
+
+  async updateClient(req: Request, res: Response, next: NextFunction) {
     const { uuid } = req.params;
-    const queryOptions: SearchQueryOptions = { uuid };
 
-    const client = await clientServiceInstance.getClientAndBankersQB(
-      queryOptions
-    );
+    try {
+      const updatedClient = await ClientService.updateClient(uuid, req.body);
 
-    res.json(client);
-  } catch (e: any) {
-    next(e);
+      Logger.debug('Updating Client with uuid: %o', updatedClient?.uuid);
+      return res.json(updatedClient);
+    } catch (e: any) {
+      next(e);
+    }
   }
-};
 
-export const updateClientController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { uuid } = req.params;
+  async deleteClient(req: Request, res: Response, next: NextFunction) {
+    const { uuid } = req.params;
 
-  try {
-    const updatedClient = await clientServiceInstance.updateClient(
-      uuid,
-      req.body
-    );
+    try {
+      const deleteResult = await ClientService.deleteClient(uuid);
 
-    Logger.debug('Updating Client with uuid: %o', updatedClient?.uuid);
-    return res.json(updatedClient);
-  } catch (e: any) {
-    next(e);
+      Logger.debug('Deleted Client with uuid: %o', uuid);
+      return res.json(deleteResult);
+    } catch (e: any) {
+      next(e);
+    }
   }
-};
+}
 
-export const deleteClientController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { uuid } = req.params;
-
-  try {
-    const deleteResult = await clientServiceInstance.deleteClient(uuid);
-
-    Logger.debug('Deleted Client with uuid: %o', uuid);
-    return res.json(deleteResult);
-  } catch (e: any) {
-    next(e);
-  }
-};
+export default new ClientController();

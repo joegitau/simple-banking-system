@@ -10,7 +10,6 @@ export class Client extends Person {
   @Column({ unique: true })
   @IsNumber()
   @Min(10, { message: 'Card number cannot have less than 10 digits.' })
-  @Max(10, { message: 'Card number cannot be greater than 10 digits.' })
   cardNumber: string;
 
   @Column({ type: 'numeric' })

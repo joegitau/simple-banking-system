@@ -10,9 +10,10 @@ export const clientCreator = object({
       ErrorMessage.EMAIL_IN_USE
     ),
     active: boolean().optional(),
-    cardNumber: number({ required_error: ErrorMessage.CARD_NO_REQUIRED })
-      .min(10, ErrorMessage.CARD_NO_MIN(10))
-      .max(10, ErrorMessage.CARD_NO_MAX(10)),
+    cardNumber: number({ required_error: ErrorMessage.CARD_NO_REQUIRED }).min(
+      10,
+      ErrorMessage.CARD_NO_MIN(10)
+    ),
     balance: number().optional(),
     transactions: object({
       amount: number({

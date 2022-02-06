@@ -6,7 +6,7 @@ import {
   TransactionType,
 } from '../../api/entities/Transaction.entity';
 
-export class TransactionService {
+class TransactionService {
   async createTransaction(
     clientUuid: string,
     input: ObjectLiteral
@@ -30,3 +30,5 @@ export class TransactionService {
     return transaction;
   }
 }
+
+export default new TransactionService();

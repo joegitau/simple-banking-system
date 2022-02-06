@@ -1,15 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 
 import Logger from '../../utils/logger';
-import { TransactionService } from '../../api/services/transaction.service';
+import TransactionService from '../../api/services/transaction.service';
 
-export default class TransactionController {
+class TransactionController {
   async createTransaction(req: Request, res: Response, next: NextFunction) {
     try {
       const { clientUuid } = req.params;
 
-      const transactionServiceInstance = new TransactionService();
-      const transaction = await transactionServiceInstance.createTransaction(
+      const transaction = await TransactionService.createTransaction(
         clientUuid,
         req.body
       );
@@ -22,3 +21,5 @@ export default class TransactionController {
     }
   }
 }
+
+export default new TransactionController();

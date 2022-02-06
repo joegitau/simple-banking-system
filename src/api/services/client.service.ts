@@ -1,7 +1,9 @@
 import { createQueryBuilder, ObjectLiteral } from 'typeorm';
 
+import { InputDTO } from '../../types';
 import { Client } from '../entities/Client.entity';
 import { SearchQueryOptions } from './common/query-builder-options';
+import { ServiceHelpers } from './common/service-helpers';
 class ClientService {
   async createClient(input: ObjectLiteral): Promise<Client> {
     const client: Client = Client.create(input);
@@ -16,6 +18,22 @@ class ClientService {
 
   async getClients(): Promise<Client[]> {
     return await Client.find();
+  }
+
+  async registerClient(input: ObjectLiteral) {
+    const hashedPassword = await ServiceHelpers.hashPassword(input);
+
+    const client = Client.create({
+      ...input,
+      password: hashedPassword,
+    });
+
+    await client.save();
+    Reflect.deleteProperty(client, 'password');
+
+    const token = ServiceHelpers.generateToken(client as InputDTO);
+
+    return { client, token };
   }
 
   // advanced select queries

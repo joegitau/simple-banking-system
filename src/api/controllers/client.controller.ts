@@ -17,6 +17,17 @@ class ClientController {
     }
   }
 
+  async registerClient(req: Request, res: Response, next: NextFunction) {
+    try {
+      const client = await ClientService.registerClient(req.body);
+
+      Logger.debug('Created Client with uuid: %o', client?.client.uuid);
+      return res.status(201).json(client);
+    } catch (e: any) {
+      next(e);
+    }
+  }
+
   async getClient(req: Request, res: Response, next: NextFunction) {
     const { uuid } = req.params;
 

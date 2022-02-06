@@ -6,7 +6,11 @@ import validateRequest from '../../api/middleware/validate-request';
 
 const route = Router();
 
-route.post('/', validateRequest(clientCreator), ClientController.createClient);
+route.post(
+  '/',
+  validateRequest(clientCreator),
+  ClientController.registerClient
+);
 route.get('/', ClientController.getClients);
 // route.get('/:uuid', ClientController.getClient);
 route.get('/:uuid', ClientController.getClientAndTransactionsByQB);

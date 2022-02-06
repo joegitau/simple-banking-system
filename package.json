@@ -18,7 +18,8 @@
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.41",
     "uuid": "^8.3.2",
-    "winston": "^3.4.0"
+    "winston": "^3.4.0",
+    "zod": "^3.11.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

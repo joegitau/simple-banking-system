@@ -1,5 +1,8 @@
 import { Router } from 'express';
 
+import validateRequest from '../../api/middleware/validate-request';
+import { clientCreator } from '../validators/client.validator';
+
 import {
   createClientController,
   deleteClientController,
@@ -12,7 +15,7 @@ import {
 
 const route = Router();
 
-route.post('/', createClientController);
+route.post('/', validateRequest(clientCreator), createClientController);
 route.get('/', getClientsController);
 // route.get('/:uuid', getClientController);
 route.get('/:uuid', getClientAndTransactionsByQBController);

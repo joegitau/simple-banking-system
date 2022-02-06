@@ -1,11 +1,11 @@
 import { DeepPartial, DeleteResult, ObjectLiteral } from 'typeorm';
 
 import Logger from '../../utils/logger';
-import { ClientService } from './client.service';
+import ClientService from './client.service';
 import { Banker } from '../../api/entities/Banker.entity';
 import { ErrorMessage } from '../../utils/helpers/error-messages';
 
-export class BankerService {
+class BankerService {
   async createBanker(input: ObjectLiteral): Promise<Banker> {
     const banker = Banker.create(input);
 
@@ -38,8 +38,7 @@ export class BankerService {
   async connectBankerToClient(bankerUuid: string, clientUuid: string) {
     const banker = await this.getBankerByUuid(bankerUuid);
 
-    const clientServiceInstance = new ClientService();
-    const client = await clientServiceInstance.getClientByUuid(clientUuid);
+    const client = await ClientService.getClientByUuid(clientUuid);
 
     if (!banker || !client) {
       Logger.error(ErrorMessage.NO_CLIENT_OR_BANKER_EXISTS);
@@ -56,3 +55,5 @@ export class BankerService {
     return await Banker.delete(banker.id);
   }
 }
+
+export default new BankerService();

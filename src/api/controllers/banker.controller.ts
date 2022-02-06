@@ -1,14 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 
 import Logger from '../../utils/logger';
-import { BankerService } from '../../api/services/banker.service';
+import BankerService from '../../api/services/banker.service';
 import { SuccessMessages } from '../../utils/helpers/success-messages';
-
-export default class BankerController {
+class BankerController {
   async createBanker(req: Request, res: Response, next: NextFunction) {
     try {
-      const bankerServiceInstance = new BankerService();
-      const banker = await bankerServiceInstance.createBanker(req.body);
+      const banker = await BankerService.createBanker(req.body);
 
       Logger.debug('Created Banker with uuid: %o', banker?.uuid);
       return res.status(201).json(banker);
@@ -21,8 +19,7 @@ export default class BankerController {
     const { uuid } = req.params;
 
     try {
-      const bankerServiceInstance = new BankerService();
-      const banker = await bankerServiceInstance.getBankerByUuid(uuid);
+      const banker = await BankerService.getBankerByUuid(uuid);
 
       return res.json(banker);
     } catch (e: any) {
@@ -32,8 +29,7 @@ export default class BankerController {
 
   async getBankers(_: Request, res: Response, next: NextFunction) {
     try {
-      const bankerServiceInstance = new BankerService();
-      const bankers = await bankerServiceInstance.getBankers();
+      const bankers = await BankerService.getBankers();
 
       return res.json(bankers);
     } catch (e: any) {
@@ -45,11 +41,7 @@ export default class BankerController {
     try {
       const { uuid } = req.params;
 
-      const bankerServiceInstance = new BankerService();
-      const updatedBanker = await bankerServiceInstance.updateBanker(
-        uuid,
-        req.body
-      );
+      const updatedBanker = await BankerService.updateBanker(uuid, req.body);
 
       Logger.debug('Updating Banker with uuid: %o', updatedBanker?.uuid);
       return res.json(updatedBanker);
@@ -63,8 +55,7 @@ export default class BankerController {
       const { bankerUuid, clientUuid } = req.params;
       Logger.info('banker & client UUIDs %o', { bankerUuid, clientUuid });
 
-      const bankerServiceInstance = new BankerService();
-      await bankerServiceInstance.connectBankerToClient(bankerUuid, clientUuid);
+      await BankerService.connectBankerToClient(bankerUuid, clientUuid);
 
       Logger.debug(
         SuccessMessages.BANKER_CLIENT_CONNECTED(bankerUuid, clientUuid)
@@ -84,9 +75,7 @@ export default class BankerController {
     const { uuid } = req.params;
 
     try {
-      const bankerServiceInstance = new BankerService();
-
-      const deleteResult = await bankerServiceInstance.deleteBanker(uuid);
+      const deleteResult = await BankerService.deleteBanker(uuid);
 
       Logger.debug('Deleted Client with uuid: %o', uuid);
       return res.json(deleteResult);
@@ -95,3 +84,5 @@ export default class BankerController {
     }
   }
 }
+
+export default new BankerController();

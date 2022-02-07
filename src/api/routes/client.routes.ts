@@ -1,16 +1,17 @@
 import { Router } from 'express';
 
-import { clientCreator } from '../validators/client.validator';
+import { clientResource } from '../validators';
 import ClientController from '../controllers/client.controller';
-import validateRequest from '../../api/middleware/validate-request';
+import { isAuth, validateRequest } from '../../api/middleware';
 
 const route = Router();
 
 route.post(
   '/',
-  validateRequest(clientCreator),
+  validateRequest(clientResource),
   ClientController.registerClient
 );
+route.post('/login', isAuth, ClientController.loginClient);
 route.get('/', ClientController.getClients);
 // route.get('/:uuid', ClientController.getClient);
 route.get('/:uuid', ClientController.getClientAndTransactionsByQB);

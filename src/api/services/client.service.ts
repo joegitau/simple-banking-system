@@ -1,9 +1,12 @@
+import argon2 from 'argon2';
 import { createQueryBuilder, ObjectLiteral } from 'typeorm';
 
 import { InputDTO } from '../../types';
 import { Client } from '../entities/Client.entity';
-import { SearchQueryOptions } from './common/query-builder-options';
 import { ServiceHelpers } from './common/service-helpers';
+import { ErrorHandler } from '../../utils/helpers/error-handler';
+import { ErrorMessage } from '../../utils/helpers/error-messages';
+import { SearchQueryOptions } from './common/query-builder-options';
 class ClientService {
   async createClient(input: ObjectLiteral): Promise<Client> {
     const client: Client = Client.create(input);
@@ -31,11 +34,31 @@ class ClientService {
     await client.save();
     Reflect.deleteProperty(client, 'password');
 
-    const token = ServiceHelpers.generateToken(client as InputDTO);
+    const token = ServiceHelpers.generateToken(client);
 
     return { client, token };
   }
 
+  async loginClient(email: string, password: string) {
+    const client = await Client.findOneOrFail({ email });
+
+    const validPassword = await argon2.verify(
+      password,
+      client.password as string
+    );
+
+    if (!validPassword) {
+      throw new ErrorHandler(401, ErrorMessage.INVALID_EMAIL_PASSWORD);
+    }
+
+    const token = ServiceHelpers.generateToken(client);
+
+    Reflect.deleteProperty(client, 'password');
+
+    return { client, token };
+  }
+
+  //////////////////////////
   // advanced select queries
   //////////////////////////
 

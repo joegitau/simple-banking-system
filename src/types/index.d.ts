@@ -5,8 +5,7 @@ import { Person } from '../api/entities/common/Person.entity';
 declare global {
   namespace Express {
     export interface Request {
-      currentClient: Client;
-      currentBanker: Banker;
+      currentUser: Client | Banker;
     }
   }
 }

@@ -28,6 +28,20 @@ class ClientController {
     }
   }
 
+  async loginClient(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, password } = req.body;
+      const result = await ClientService.loginClient(email, password);
+
+      Logger.debug('Loging in Client, %o', `${result.client.firstname}`);
+      return res
+        .status(201)
+        .json({ client: result.client, token: result.token });
+    } catch (e: any) {
+      next(e);
+    }
+  }
+
   async getClient(req: Request, res: Response, next: NextFunction) {
     const { uuid } = req.params;
 

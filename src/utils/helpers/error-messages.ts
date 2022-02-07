@@ -15,5 +15,10 @@ export const ErrorMessage = {
   EMPLOYEE_NO_MIN: (min: number) => `Employee number cannot be less than ${min} digits.`,
   EMPLOYEE_NO_MAX: (max: number) => `Employee number cannot be greater than ${max} digits.`,
   AMOUNT_NUMERIC: 'Amount should be numeric',
-  AMOUNT_IS_REQUIRED: 'Transaction amount is required.'
+  AMOUNT_IS_REQUIRED: 'Transaction amount is required.',
+  CURRENT_USER_NOT_ATTACHED: 'Current user could not be attached to REQUEST object.',
+  INVALID_ACCESS_TOKEN: 'Invalid Access token.',
+  TOKEN_NOT_FOUND: 'Access token not found.',
+  INVALID_EMAIL_PASSWORD: 'Invalid email or password.',
+  PASSWORD_MIN: (min: number) => `Password must contain more than ${min} characters.`,
 };

@@ -21,4 +21,6 @@ export const ErrorMessage = {
   TOKEN_NOT_FOUND: 'Access token not found.',
   INVALID_EMAIL_PASSWORD: 'Invalid email or password.',
   PASSWORD_MIN: (min: number) => `Password must contain more than ${min} characters.`,
+  CURRENT_USER_NOT_FOUND: 'Current user not found.',
+  FORBIDDEN: 'Forbidden.',
 };

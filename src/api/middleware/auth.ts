@@ -16,7 +16,9 @@ const isAuth = (req: Request, _res: Response, next: NextFunction) => {
     config.ACCESS_TOKEN_SECRET,
     { algorithms: ['HS256'] },
     (err: any, decoded: any) => {
-      if (err) throw new ErrorHandler(403, ErrorMessage.INVALID_ACCESS_TOKEN);
+      if (err) {
+        throw new ErrorHandler(403, ErrorMessage.INVALID_ACCESS_TOKEN);
+      }
 
       req.currentUser = decoded;
 

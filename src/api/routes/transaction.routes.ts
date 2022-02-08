@@ -1,13 +1,15 @@
 import express from 'express';
 
-import { validateRequest } from '../../api/middleware';
+import { transactionResource } from '../validators';
+import { checkRole, isAuth, validateRequest } from '../../api/middleware';
 import TransactionController from '../../api/controllers/transaction.controller';
-import { transactionResource } from '../validators/transaction.validator';
 
 const route = express.Router();
 
 route.post(
   '/:clientUuid/transactions',
+  isAuth,
+  checkRole('client'),
   validateRequest(transactionResource),
   TransactionController.createTransaction
 );

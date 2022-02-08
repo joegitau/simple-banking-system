@@ -1,18 +1,16 @@
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import { randomBytes } from 'crypto';
-import { ObjectLiteral } from 'typeorm';
 
-import { InputDTO } from '../../../types';
 import config from '../../../config';
 import { Client } from '../../../api/entities/Client.entity';
 import { Banker } from '../../../api/entities/Banker.entity';
 
 export class ServiceHelpers {
-  static async hashPassword(input: ObjectLiteral): Promise<string> {
+  static async hashPassword(user: Client | Banker): Promise<string> {
     const salt = randomBytes(32);
 
-    return await argon2.hash(input.password, { salt });
+    return await argon2.hash(user.password, { salt });
   }
 
   static generateToken(user: Client | Banker): string {

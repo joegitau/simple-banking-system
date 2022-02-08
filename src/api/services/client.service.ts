@@ -1,7 +1,6 @@
 import argon2 from 'argon2';
 import { createQueryBuilder, ObjectLiteral } from 'typeorm';
 
-import { InputDTO } from '../../types';
 import { Client } from '../entities/Client.entity';
 import { ServiceHelpers } from './common/service-helpers';
 import { ErrorHandler } from '../../utils/helpers/error-handler';
@@ -23,7 +22,7 @@ class ClientService {
     return await Client.find();
   }
 
-  async registerClient(input: ObjectLiteral) {
+  async registerClient(input: Client) {
     const hashedPassword = await ServiceHelpers.hashPassword(input);
 
     const client = Client.create({
@@ -42,10 +41,7 @@ class ClientService {
   async loginClient(email: string, password: string) {
     const client = await Client.findOneOrFail({ email });
 
-    const validPassword = await argon2.verify(
-      password,
-      client.password as string
-    );
+    const validPassword = await argon2.verify(client.password, password);
 
     if (!validPassword) {
       throw new ErrorHandler(401, ErrorMessage.INVALID_EMAIL_PASSWORD);

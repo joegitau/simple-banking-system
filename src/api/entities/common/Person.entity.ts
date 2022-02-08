@@ -37,7 +37,7 @@ export abstract class Person extends BaseEntity {
 
   @Column()
   @Min(3, { message: 'Password must be at least 3 characters long.' })
-  password?: string;
+  password: string;
 
   @Column()
   role?: Role = 'user';

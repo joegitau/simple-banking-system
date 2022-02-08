@@ -11,12 +11,12 @@ route.post(
   validateRequest(clientResource),
   ClientController.registerClient
 );
-route.post('/login', isAuth, ClientController.loginClient);
+route.post('/login', ClientController.loginClient);
 route.get('/', ClientController.getClients);
 // route.get('/:uuid', ClientController.getClient);
 route.get('/:uuid', ClientController.getClientAndTransactionsByQB);
 // route.get('/:uuid', ClientController.getClientBankersByQB);
-route.put('/:uuid', ClientController.updateClient);
-route.delete('/:uuid', ClientController.deleteClient);
+route.put('/:uuid', isAuth, ClientController.updateClient);
+route.delete('/:uuid', isAuth, ClientController.deleteClient);
 
 export default route;

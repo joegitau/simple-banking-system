@@ -1,0 +1,56 @@
+@url = http://localhost:5000/api
+
+GET {{url}}/client/e0c4b8f7-368e-47c8-8fec-1fe094e6d118
+
+### 
+GET {{url}}/clients
+
+###
+POST {{url}}/clients
+Content-Type: application/json
+
+{
+  "firstname": "Alex",
+  "lastname": "Arnold",
+  "email": "alex@arnold.com",
+  "password": "liverpool",
+  "cardNumber": 7154567454,
+  "balance": 100,
+  "hobbies": ["football", "dancing", "swimming"]
+}
+
+###
+POST {{url}}/clients/login
+Content-Type: application/json
+
+{
+  "email": "sadio@mane.com",
+  "password": "liverpool"
+}
+
+###
+PUT {{url}}/clients/6743e0bc-932f-43d2-b143-d5fb9e8b8ebd
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNjc0M2UwYmMtOTMyZi00M2QyLWIxNDMtZDVmYjllOGI4ZWJkIiwibGFzdG5hbWUiOiJNYW5lIiwicm9sZSI6InVzZXIiLCJleHAiOjE2NDQ5NjI4MzkuMzA0LCJpYXQiOjE2NDQzNTgwMzl9.vJTFDXKbGbTCeYKCrU0XLS98HLdgautPl9Gp26K68tw
+
+{
+  "balance": 1000,
+  "role": "client"
+}
+
+
+###
+DELETE {{url}}/clients/e543a8fe-3f39-443e-8e94-745d88d456e8
+
+###
+POST {{url}}/clients/e543a8fe-3f39-443e-8e94-745d88d456e8/transactions
+Content-Type: application/json
+
+{
+  "amount": 2500,
+  "type": "deposit",
+  
+}
+
+### 
+GET {{url}}/bankers

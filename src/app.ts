@@ -21,7 +21,7 @@ const initApp = async () => {
 
   app
     .listen(config.PORT, () => {
-      Logger.info(`App running on http://localhost:${config.PORT}`);
+      Logger.info(`::: App running on http://localhost:${config.PORT} :::`);
     })
     .on('error', (err) => {
       Logger.error(err);

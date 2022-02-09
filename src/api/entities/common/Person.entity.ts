@@ -12,7 +12,7 @@ import {
 import { v4 as uuid } from 'uuid';
 import { IsEmail, IsString, Min } from 'class-validator';
 
-export type Role = 'user' | 'client' | 'banker';
+export type Role = 'user' | 'client' | 'banker' | 'admin';
 @Entity()
 export abstract class Person extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -64,8 +64,8 @@ export abstract class Person extends BaseEntity {
   hasAccessTo(role: Role): boolean {
     const roles = ['user', 'client', 'banker'];
 
-    // return roles.indexOf(this.role) >= roles.indexOf(role);
-    return roles.includes(role);
+    return roles.indexOf(this.role) >= roles.indexOf(role);
+    // return roles.includes(role);
   }
 
   // override toJSON() to discard Entitiy Id

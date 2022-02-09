@@ -6,17 +6,6 @@ import { TransactionType } from '../../api/entities/Transaction.entity';
 import { SearchQueryOptions } from '../../api/services/common/query-builder-options';
 
 class ClientController {
-  async createClient(req: Request, res: Response, next: NextFunction) {
-    try {
-      const client = await ClientService.createClient(req.body);
-
-      Logger.debug('Created Client with uuid: %o', client?.uuid);
-      return res.status(201).json(client);
-    } catch (e: any) {
-      next(e);
-    }
-  }
-
   async registerClient(req: Request, res: Response, next: NextFunction) {
     try {
       const client = await ClientService.registerClient(req.body);
@@ -53,7 +42,7 @@ class ClientController {
     }
   }
 
-  async getClients(req: Request, res: Response, next: NextFunction) {
+  async getClients(_req: Request, res: Response, next: NextFunction) {
     try {
       const clients = await ClientService.getClients();
       return res.json(clients);

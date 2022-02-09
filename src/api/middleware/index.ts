@@ -1,5 +1,5 @@
 import isAuth from './auth';
-import checkRole from './check-role';
+import checkPermission from './check-permission';
 import validateRequest from './validate-request';
 
-export { validateRequest, isAuth, checkRole };
+export { validateRequest, isAuth, checkPermission };

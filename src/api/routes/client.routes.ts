@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import { clientResource } from '../validators';
 import ClientController from '../controllers/client.controller';
-import { checkRole, isAuth, validateRequest } from '../../api/middleware';
+import { checkPermission, isAuth, validateRequest } from '../../api/middleware';
 
 const route = Router();
 
@@ -12,11 +12,31 @@ route.post(
   ClientController.registerClient
 );
 route.post('/login', ClientController.loginClient);
-route.get('/', isAuth, checkRole('client'), ClientController.getClients);
-// route.get('/:uuid', ClientController.getClient);
-route.get('/:uuid', ClientController.getClientAndTransactionsByQB);
-// route.get('/:uuid', ClientController.getClientBankersByQB);
-route.put('/:uuid', isAuth, ClientController.updateClient);
-route.delete('/:uuid', isAuth, ClientController.deleteClient);
+route.get(
+  '/',
+  isAuth,
+  checkPermission('client', 'admin'),
+  ClientController.getClients
+);
+// route.get('/:uuid', checkPermission('client'), ClientController.getClient);
+route.get(
+  '/:uuid',
+  isAuth,
+  checkPermission('client'),
+  ClientController.getClientAndTransactionsByQB
+);
+// route.get('/:uuid', isAuth, checkPermission('client', 'admin'), ClientController.getClientBankersByQB);
+route.put(
+  '/:uuid',
+  isAuth,
+  checkPermission('client', 'admin'),
+  ClientController.updateClient
+);
+route.delete(
+  '/:uuid',
+  isAuth,
+  checkPermission('client', 'admin'),
+  ClientController.deleteClient
+);
 
 export default route;

@@ -1,13 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 
 import Logger from '../../utils/logger';
-import clientService from '../../api/services/client.service';
-import { Role } from '../../api/entities/common/Person.entity';
+import clientService from '../services/client.service';
+import { Role } from '../entities/common/Person.entity';
 import { ErrorHandler } from '../../utils/helpers/error-handler';
 import { ErrorMessage } from '../../utils/helpers/error-messages';
 
-const checkRole =
-  (role: Role) => async (req: Request, res: Response, next: NextFunction) => {
+const checkPermission =
+  (...roles: Role[]) =>
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { uuid } = req.currentUser;
 
@@ -17,7 +18,7 @@ const checkRole =
         throw new ErrorHandler(401, ErrorMessage.CURRENT_USER_NOT_FOUND);
       }
 
-      if (!user.hasAccessTo(role)) {
+      if (!roles.includes(user.role)) {
         throw new ErrorHandler(403, ErrorMessage.FORBIDDEN);
       }
 
@@ -28,4 +29,4 @@ const checkRole =
     }
   };
 
-export default checkRole;
+export default checkPermission;

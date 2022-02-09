@@ -7,13 +7,6 @@ import { ErrorHandler } from '../../utils/helpers/error-handler';
 import { ErrorMessage } from '../../utils/helpers/error-messages';
 import { SearchQueryOptions } from './common/query-builder-options';
 class ClientService {
-  async createClient(input: ObjectLiteral): Promise<Client> {
-    const client: Client = Client.create(input);
-    await client.save();
-
-    return client;
-  }
-
   async getClientByUuid(uuid: string): Promise<Client> {
     return await Client.findOneOrFail({ uuid });
   }

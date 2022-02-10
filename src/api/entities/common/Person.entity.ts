@@ -13,6 +13,7 @@ import { v4 as uuid } from 'uuid';
 import { IsEmail, IsString, Min } from 'class-validator';
 
 export type Role = 'user' | 'client' | 'banker' | 'admin';
+
 @Entity()
 export abstract class Person extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -45,6 +46,9 @@ export abstract class Person extends BaseEntity {
   @Column({ default: true })
   active: boolean;
 
+  @Column('simple-array', { default: '' })
+  tokens: string[];
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -61,15 +65,8 @@ export abstract class Person extends BaseEntity {
     this.updatedAt = new Date();
   }
 
-  hasAccessTo(role: Role): boolean {
-    const roles = ['user', 'client', 'banker'];
-
-    return roles.indexOf(this.role) >= roles.indexOf(role);
-    // return roles.includes(role);
-  }
-
   // override toJSON() to discard Entitiy Id
-  // toJSON() {
-  //   return { ...this, id: undefined };
-  // }
+  toJSON() {
+    return { ...this, id: undefined };
+  }
 }

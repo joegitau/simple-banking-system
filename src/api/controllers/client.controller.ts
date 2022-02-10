@@ -10,7 +10,7 @@ class ClientController {
     try {
       const client = await ClientService.registerClient(req.body);
 
-      Logger.debug('Created Client with uuid: %o', client?.client.uuid);
+      Logger.debug('Created Client with uuid: %o', client.uuid);
       return res.status(201).json(client);
     } catch (e: any) {
       next(e);
@@ -22,10 +22,18 @@ class ClientController {
       const { email, password } = req.body;
       const result = await ClientService.loginClient(email, password);
 
-      Logger.debug('Loging in Client, %o', `${result.client.firstname}`);
-      return res
-        .status(201)
-        .json({ client: result.client, token: result.token });
+      Logger.debug('Loging in Client, %o', `${result.client.lastname}`);
+
+      res.cookie('jwt', result.refreshToken, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, // eq. 1 day
+      });
+
+      return res.status(201).json({
+        client: result.client,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      });
     } catch (e: any) {
       next(e);
     }

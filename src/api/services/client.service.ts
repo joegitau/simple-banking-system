@@ -1,6 +1,7 @@
 import argon2 from 'argon2';
 import { createQueryBuilder, ObjectLiteral } from 'typeorm';
 
+import config from '../../config';
 import { Client } from '../entities/Client.entity';
 import { ServiceHelpers } from './common/service-helpers';
 import { ErrorHandler } from '../../utils/helpers/error-handler';
@@ -12,10 +13,13 @@ class ClientService {
   }
 
   async getClients(): Promise<Client[]> {
-    return await Client.find();
+    const clients = await Client.find();
+    clients.forEach((client) => Reflect.deleteProperty(client, 'password'));
+
+    return clients;
   }
 
-  async registerClient(input: Client) {
+  async registerClient(input: Client): Promise<Client> {
     const hashedPassword = await ServiceHelpers.hashPassword(input);
 
     const client = Client.create({
@@ -26,12 +30,17 @@ class ClientService {
     await client.save();
     Reflect.deleteProperty(client, 'password');
 
-    const token = ServiceHelpers.generateToken(client);
-
-    return { client, token };
+    return client;
   }
 
-  async loginClient(email: string, password: string) {
+  async loginClient(
+    email: string,
+    password: string
+  ): Promise<{
+    client: Client;
+    accessToken: string;
+    refreshToken: string;
+  }> {
     const client = await Client.findOneOrFail({ email });
 
     const validPassword = await argon2.verify(client.password, password);
@@ -40,11 +49,24 @@ class ClientService {
       throw new ErrorHandler(401, ErrorMessage.INVALID_EMAIL_PASSWORD);
     }
 
-    const token = ServiceHelpers.generateToken(client);
+    const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = config;
+    const accessToken = ServiceHelpers.generateToken(client, {
+      secret: ACCESS_TOKEN_SECRET,
+      expiry: '15m',
+    });
+
+    const refreshToken = ServiceHelpers.generateToken(client, {
+      secret: REFRESH_TOKEN_SECRET,
+      expiry: '7d',
+    });
+
+    // save refreshTokens to DB
+    client.tokens = client.tokens.concat(accessToken);
+    await client.save();
 
     Reflect.deleteProperty(client, 'password');
 
-    return { client, token };
+    return { client, accessToken, refreshToken };
   }
 
   //////////////////////////

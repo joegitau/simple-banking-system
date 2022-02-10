@@ -9,25 +9,3 @@ declare global {
     }
   }
 }
-
-export interface InputDTO extends Person {
-  firstname: string;
-  lastname: string;
-  email: string;
-  password: string;
-}
-
-export interface IClientResponseDTO {
-  client: Client;
-  token: string;
-}
-
-export interface IClientResponseDTO {
-  client: Client;
-  token: string;
-}
-
-export interface IBankerResponseDTO {
-  banker: Banker;
-  token: string;
-}

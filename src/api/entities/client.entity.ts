@@ -27,6 +27,6 @@ export class Client extends Person {
     maritalStatus: string;
   };
 
-  @Column({ type: 'simple-array', default: [] })
+  @Column({ type: 'simple-array', default: '' })
   hobbies: string[];
 }

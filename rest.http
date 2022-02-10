@@ -2,31 +2,38 @@
 
 GET {{url}}/client/e0c4b8f7-368e-47c8-8fec-1fe094e6d118
 
+
 ### 
 GET {{url}}/clients
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZjE0MTVjMTQtOWM2MS00NTQyLTk1ZDQtZTEzNTY3ZDA1MWNmIiwibGFzdG5hbWUiOiJLbG9wcCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY0NDUzMTc0MCwiZXhwIjoxNjQ0NTMyNjQwfQ.oru_w8PStbLEuc1zlvJtntAIqx68_IAmMzDnFYChPAU
 
 ###
 POST {{url}}/clients
 Content-Type: application/json
 
 {
-  "firstname": "Alex",
-  "lastname": "Arnold",
-  "email": "alex@arnold.com",
+  "firstname": "Jurgen",
+  "lastname": "Klopp",
+  "email": "jurgen@klopp.com",
+  "role": "admin",
   "password": "liverpool",
-  "cardNumber": 7154567454,
-  "balance": 100,
-  "hobbies": ["football", "dancing", "swimming"]
+  "cardNumber": 7154507254,
+  "balance": 1000,
+  "hobbies": ["football", "drinking", "golf"]
 }
+
+
 
 ###
 POST {{url}}/clients/login
 Content-Type: application/json
 
 {
-  "email": "sadio@mane.com",
+  "email": "jurgen@klopp.com",
   "password": "liverpool"
 }
+
+
 
 ###
 PUT {{url}}/clients/6743e0bc-932f-43d2-b143-d5fb9e8b8ebd
@@ -39,8 +46,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNjc0M2UwY
 }
 
 
+
 ###
 DELETE {{url}}/clients/e543a8fe-3f39-443e-8e94-745d88d456e8
+
+
 
 ###
 POST {{url}}/clients/e543a8fe-3f39-443e-8e94-745d88d456e8/transactions
@@ -51,6 +61,7 @@ Content-Type: application/json
   "type": "deposit",
   
 }
+
 
 ### 
 GET {{url}}/bankers

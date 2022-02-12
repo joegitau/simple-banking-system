@@ -24,15 +24,15 @@ class ClientController {
 
       Logger.debug('Loging in Client, %o', `${result.client.lastname}`);
 
+      // set refreshToken within res.cookie
       res.cookie('jwt', result.refreshToken, {
         httpOnly: true,
+        sameSite: 'none',
         maxAge: 24 * 60 * 60 * 1000, // eq. 1 day
       });
 
       return res.status(201).json({
-        client: result.client,
         accessToken: result.accessToken,
-        refreshToken: result.refreshToken,
       });
     } catch (e: any) {
       next(e);

@@ -17,16 +17,16 @@ export class ServiceHelpers {
     return await argon2.hash(user.password, { salt });
   }
 
-  static generateToken(user: Client | Banker, options: TokenOptions): string {
-    const payload = {
-      uuid: user.uuid,
-      lastname: user.lastname,
-      role: user.role,
-    };
+  // static generateToken(user: Client | Banker, options: TokenOptions): string {
+  //   const payload = {
+  //     uuid: user.uuid,
+  //     lastname: user.lastname,
+  //     role: user.role,
+  //   };
 
-    return jwt.sign(payload, options.secret, {
-      expiresIn: options.expiry,
-      algorithm: 'HS256',
-    });
-  }
+  //   return jwt.sign(payload, options.secret, {
+  //     expiresIn: options.expiry,
+  //     algorithm: 'HS256',
+  //   });
+  // }
 }

@@ -2,6 +2,7 @@ import argon2 from 'argon2';
 import { createQueryBuilder, ObjectLiteral } from 'typeorm';
 
 import config from '../../config';
+import { JWTHelpers } from '../../api/jwt';
 import { Client } from '../entities/Client.entity';
 import { ServiceHelpers } from './common/service-helpers';
 import { ErrorHandler } from '../../utils/helpers/error-handler';
@@ -50,18 +51,19 @@ class ClientService {
     }
 
     const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = config;
-    const accessToken = ServiceHelpers.generateToken(client, {
+
+    const accessToken = JWTHelpers.generateToken(client, {
       secret: ACCESS_TOKEN_SECRET,
-      expiry: '15m',
+      expiry: '300s',
     });
 
-    const refreshToken = ServiceHelpers.generateToken(client, {
+    const refreshToken = JWTHelpers.generateToken(client, {
       secret: REFRESH_TOKEN_SECRET,
-      expiry: '7d',
+      expiry: '1d',
     });
 
-    // save refreshTokens to DB
-    client.tokens = client.tokens.concat(accessToken);
+    // save refreshTokens with currentUser
+    client.tokens = client.tokens.concat(refreshToken);
     await client.save();
 
     Reflect.deleteProperty(client, 'password');

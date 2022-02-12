@@ -17,10 +17,13 @@ export const ErrorMessage = {
   AMOUNT_NUMERIC: 'Amount should be numeric',
   AMOUNT_IS_REQUIRED: 'Transaction amount is required.',
   CURRENT_USER_NOT_ATTACHED: 'Current user could not be attached to REQUEST object.',
+  INVALID_TOKEN: 'Invalid token.',
   INVALID_ACCESS_TOKEN: 'Invalid Access token.',
+  INVALID_REFRESH_TOKEN: 'Invalid Refresh token.',
   TOKEN_NOT_FOUND: 'Access token not found.',
   INVALID_EMAIL_PASSWORD: 'Invalid email or password.',
   PASSWORD_MIN: (min: number) => `Password must contain more than ${min} characters.`,
   CURRENT_USER_NOT_FOUND: 'Current user not found.',
   FORBIDDEN: 'Forbidden.',
+  INTERNAL_SERVER_ERROR: 'Internal server error.',
 };

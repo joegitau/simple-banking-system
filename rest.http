@@ -5,19 +5,18 @@ GET {{url}}/client/e0c4b8f7-368e-47c8-8fec-1fe094e6d118
 
 ### 
 GET {{url}}/clients
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZjE0MTVjMTQtOWM2MS00NTQyLTk1ZDQtZTEzNTY3ZDA1MWNmIiwibGFzdG5hbWUiOiJLbG9wcCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY0NDUzMTc0MCwiZXhwIjoxNjQ0NTMyNjQwfQ.oru_w8PStbLEuc1zlvJtntAIqx68_IAmMzDnFYChPAU
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZjE0MTVjMTQtOWM2MS00NTQyLTk1ZDQtZTEzNTY3ZDA1MWNmIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjQ0Njk5MjY2LCJleHAiOjE2NDQ2OTk1NjZ9.d2H1_zchu1Bd0TD130kpEVaHo87ptgDYJXx5H7mDKBc
 ###
 POST {{url}}/clients
 Content-Type: application/json
 
 {
-  "firstname": "Jurgen",
-  "lastname": "Klopp",
-  "email": "jurgen@klopp.com",
-  "role": "admin",
+  "firstname": "Jordan",
+  "lastname": "Hendo",
+  "email": "jordan@hendo.com",
+  "role": "banker",
   "password": "liverpool",
-  "cardNumber": 7154507254,
+  "cardNumber": 10254507254,
   "balance": 1000,
   "hobbies": ["football", "drinking", "golf"]
 }

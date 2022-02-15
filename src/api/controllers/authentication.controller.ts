@@ -1,27 +1,38 @@
 import { Request, Response, NextFunction } from 'express';
 
 import Logger from '../../utils/logger';
+import clientController from './client.controller';
+import bankerController from './banker.controller';
+import { ErrorMessage } from '../../utils/helpers/error-messages';
 import authenticationService from '../../api/services/authentication.service';
 
 class AuthenticationController {
-  async login(req: Request, res: Response, next: NextFunction) {
-    const { email, password } = req.body;
+  redirectUser(req: Request, res: Response, next: NextFunction) {
+    if (req.query?.user_type === 'client') {
+      Logger.info('::: Login client. :::');
+      clientController.loginClient(req, res, next);
+    } else {
+      Logger.info('::: Login banker. :::');
+      // bankerController.loginBanker; needs to be created!
+    }
+  }
 
+  async setRefreshToken(req: Request, res: Response, next: NextFunction) {
+    const cookies = req.cookies;
+    if (!cookies.jwt) {
+      return res
+        .status(401)
+        .json({ error: { message: ErrorMessage.JWT_TOKEN_NOT_FOUND } });
+    }
+
+    const refreshToken = cookies.jwt;
     try {
-      const result = await authenticationService.login(email, password);
+      const newAccessToken = await authenticationService.setRefreshToken(
+        refreshToken
+      );
 
-      // set refreshToken within current user's res.cookies
-      res.cookie('jwt', result.refreshToken, {
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
-        sameSite: 'none',
-      });
-
-      Logger.silly('::: Loging in user...');
-      res.json({
-        accessToken: result.accessToken,
-        refreshToken: result.refreshToken,
-      });
+      Logger.debug('Generated new accessToken %o', newAccessToken);
+      return res.json(newAccessToken);
     } catch (e: any) {
       next(e);
     }

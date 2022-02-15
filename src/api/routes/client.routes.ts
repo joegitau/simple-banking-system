@@ -11,7 +11,7 @@ route.post(
   validateRequest(clientResource),
   ClientController.registerClient
 );
-route.post('/login', ClientController.loginClient);
+route.post('/login', ClientController.loginClient); // api/clients/login
 route.get(
   '/',
   isAuth,

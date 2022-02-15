@@ -4,6 +4,8 @@ import Logger from '../../utils/logger';
 import ClientService from '../services/client.service';
 import { TransactionType } from '../../api/entities/Transaction.entity';
 import { SearchQueryOptions } from '../../api/services/common/query-builder-options';
+import authenticationService from '../../api/services/authentication.service';
+import { Client } from '../../api/entities/Client.entity';
 
 class ClientController {
   async registerClient(req: Request, res: Response, next: NextFunction) {
@@ -20,9 +22,12 @@ class ClientController {
   async loginClient(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
-      const result = await ClientService.loginClient(email, password);
+      const result = await authenticationService.login(
+        email,
+        password
+      )(async (email) => await Client.findOneOrFail({ email }));
 
-      Logger.debug('Loging in Client, %o', `${result.client.lastname}`);
+      Logger.debug('Loging in Client, %o');
 
       // set refreshToken within res.cookie
       res.cookie('jwt', result.refreshToken, {

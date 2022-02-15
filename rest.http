@@ -24,7 +24,7 @@ Content-Type: application/json
 
 
 ###
-POST {{url}}/clients/login
+POST {{url}}/auth?user_type=client
 Content-Type: application/json
 
 {

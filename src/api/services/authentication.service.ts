@@ -1,36 +1,64 @@
 import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
 
 import config from '../../config';
 import { JWTHelpers } from '../../api/jwt';
-import { Person } from '../../api/entities/common/Person.entity';
+import { Client } from '../../api/entities/Client.entity';
+import { Banker } from '../../api/entities/Banker.entity';
 import { ErrorHandler } from '../../utils/helpers/error-handler';
 import { ErrorMessage } from '../../utils/helpers/error-messages';
 
+export type UserEntity = Banker | Client;
+
 class AuthenticationService {
-  async login(email: string, password: string) {
-    const user: Person = await Person.findOneOrFail({ email });
+  private user: UserEntity;
 
-    const validPassword = argon2.verify(password, user.password);
-    if (!validPassword) {
-      throw new ErrorHandler(401, ErrorMessage.INVALID_EMAIL_PASSWORD);
-    }
+  login(email: string, password: string) {
+    return async (findUserFn: (email: string) => Promise<UserEntity>) => {
+      this.user = await findUserFn(email);
 
-    const accessToken = JWTHelpers.generateToken(user, {
-      secret: config.ACCESS_TOKEN_SECRET,
-      expiry: '300s',
-    });
+      const validPassword = argon2.verify(this.user?.password, password);
+      if (!validPassword) {
+        throw new ErrorHandler(401, ErrorMessage.INVALID_EMAIL_PASSWORD);
+      }
 
-    const refreshToken = JWTHelpers.generateToken(user, {
-      secret: config.REFRESH_TOKEN_SECRET,
-      expiry: '1y',
-    });
+      const accessToken = JWTHelpers.generateToken(this.user, {
+        secret: config.ACCESS_TOKEN_SECRET,
+        expiry: '300s',
+      });
 
-    user.tokens = user.tokens.concat(refreshToken);
-    await user.save();
+      const refreshToken = JWTHelpers.generateToken(this.user, {
+        secret: config.REFRESH_TOKEN_SECRET,
+        expiry: '1y',
+      });
 
-    Reflect.deleteProperty(user, 'password');
+      this.user.tokens = this.user.tokens.concat(refreshToken);
+      await this.user.save();
 
-    return { accessToken, refreshToken };
+      Reflect.deleteProperty(this.user, 'password');
+
+      return { accessToken, refreshToken };
+    };
+  }
+
+  async setRefreshToken(refreshToken: string) {
+    jwt.verify(
+      refreshToken,
+      config.REFRESH_TOKEN_SECRET,
+      (err: any, decoded: any) => {
+        if (err || this.user.uuid !== decoded) {
+          throw new ErrorHandler(403, ErrorMessage.INVALID_REFRESH_TOKEN);
+        }
+
+        // create a new accessToken
+        const newAccessToken = JWTHelpers.generateToken(this.user, {
+          secret: config.ACCESS_TOKEN_SECRET,
+          expiry: '300s',
+        });
+
+        return newAccessToken;
+      }
+    );
   }
 }
 

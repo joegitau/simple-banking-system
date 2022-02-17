@@ -2,7 +2,6 @@ import { Router } from 'express';
 
 import { validateRequest } from '../../api/middleware';
 import userDTOResource from '../../api/validators/user-dto.validator';
-import clientController from '../../api/controllers/client.controller';
 import authenticationController from '../../api/controllers/authentication.controller';
 
 const route = Router();

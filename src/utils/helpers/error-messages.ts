@@ -24,6 +24,7 @@ export const ErrorMessage = {
   INVALID_EMAIL_PASSWORD: 'Invalid email or password.',
   PASSWORD_MIN: (min: number) => `Password must contain more than ${min} characters.`,
   CURRENT_USER_NOT_FOUND: 'Current user not found.',
+  CURRENT_USER_ROLE_NOT_FOUND: 'Current user\'s role not defined.',
   USER_NOT_FOUND: 'User not found.',
   FORBIDDEN: 'Forbidden.',
   INTERNAL_SERVER_ERROR: 'Internal server error.',

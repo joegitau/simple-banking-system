@@ -1,22 +1,25 @@
 @url = http://localhost:5000/api
 
 GET {{url}}/client/e0c4b8f7-368e-47c8-8fec-1fe094e6d118
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiN2M5NjA1NjktMDBiZi00ZDYyLWI3MjYtYTVhMjY3MTM0ODU5Iiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY0NTEzNzcwOSwiZXhwIjoxNjQ1MTM4MDA5fQ.AbuZryhHMk8mhw0Sb3Sq6a_IwmIPlw3BSIxDpROBeOQ
 
 
 ### 
 GET {{url}}/clients
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZjE0MTVjMTQtOWM2MS00NTQyLTk1ZDQtZTEzNTY3ZDA1MWNmIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjQ0Njk5MjY2LCJleHAiOjE2NDQ2OTk1NjZ9.d2H1_zchu1Bd0TD130kpEVaHo87ptgDYJXx5H7mDKBc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZjE0MTVjMTQtOWM2MS00NTQyLTk1ZDQtZTEzNTY3ZDA1MWNmIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjQ1MTM5MTg1LCJleHAiOjE2NDUxMzk0ODV9.nttyDtbtWuIU9jlKGG2CqWjIwIr_m0qDDUrbE1_r9RQ
+
+
 ###
 POST {{url}}/clients
 Content-Type: application/json
 
 {
-  "firstname": "Jordan",
-  "lastname": "Hendo",
-  "email": "jordan@hendo.com",
-  "role": "banker",
+  "firstname": "Virjil",
+  "lastname": "Van Dijk",
+  "email": "virgil@dijk.com",
+  "role": "client",
   "password": "liverpool",
-  "cardNumber": 10254507254,
+  "cardNumber": 77254507254,
   "balance": 1000,
   "hobbies": ["football", "drinking", "golf"]
 }

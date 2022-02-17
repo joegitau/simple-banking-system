@@ -1,14 +1,10 @@
 import argon2 from 'argon2';
-import jwt from 'jsonwebtoken';
 
 import config from '../../config';
-import { JWTHelpers } from '../../api/jwt';
-import { Client } from '../../api/entities/Client.entity';
-import { Banker } from '../../api/entities/Banker.entity';
+import JWTHelpers from '../../api/jwt';
+import { UserEntity } from '../../types';
 import { ErrorHandler } from '../../utils/helpers/error-handler';
 import { ErrorMessage } from '../../utils/helpers/error-messages';
-
-export type UserEntity = Banker | Client;
 
 class AuthenticationService {
   private user: UserEntity;
@@ -42,9 +38,9 @@ class AuthenticationService {
   }
 
   async setRefreshToken(refreshToken: string) {
-    jwt.verify(
+    JWTHelpers.verifyToken(
       refreshToken,
-      config.REFRESH_TOKEN_SECRET,
+      { secret: config.REFRESH_TOKEN_SECRET },
       (err: any, decoded: any) => {
         if (err || this.user.uuid !== decoded) {
           throw new ErrorHandler(403, ErrorMessage.INVALID_REFRESH_TOKEN);

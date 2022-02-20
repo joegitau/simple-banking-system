@@ -16,8 +16,7 @@ class AuthenticationController {
       clientController.loginClient(req, res, next);
     } else {
       Logger.info('::: Login banker. :::');
-      // FIXME: add loginBanker within bankerController
-      // bankerController.loginBanker; needs to be created!
+      bankerController.loginBanker(req, res, next);
     }
   }
 
@@ -69,8 +68,7 @@ class AuthenticationController {
       clientController.logoutClient(req, res, next);
     } else {
       Logger.info('::: Logout banker. :::');
-      // FIXME: add logoutBanker within bankerController
-      // bankerController.logoutBanker; needs to be created!
+      bankerController.logoutBanker(req, res, next);
     }
   }
 }

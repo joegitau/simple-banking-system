@@ -2,10 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 
 import Logger from '../../utils/logger';
 import ClientService from '../services/client.service';
-import { TransactionType } from '../../api/entities/Transaction.entity';
-import { SearchQueryOptions } from '../../api/services/common/query-builder-options';
-import authenticationService from '../../api/services/authentication.service';
 import { Client } from '../../api/entities/Client.entity';
+import { TransactionType } from '../../api/entities/Transaction.entity';
+import authenticationService from '../../api/services/authentication.service';
+import { SearchQueryOptions } from '../../api/services/common/query-builder-options';
 
 class ClientController {
   async registerClient(req: Request, res: Response, next: NextFunction) {
@@ -84,7 +84,7 @@ class ClientController {
     }
   }
 
-  // FIXME - for some reason not working!
+  // FIXME: - for some reason not working!
   async getClientBankersByQB(req: Request, res: Response, next: NextFunction) {
     try {
       const { uuid } = req.params;
@@ -119,6 +119,38 @@ class ClientController {
 
       Logger.debug('Deleted Client with uuid: %o', uuid);
       return res.json(deleteResult);
+    } catch (e: any) {
+      next(e);
+    }
+  }
+
+  async logoutClient(req: Request, res: Response, next: NextFunction) {
+    const cookies = req.cookies;
+    if (!cookies?.jwt) {
+      return res.sendStatus(204); // No content
+    }
+
+    const refreshToken = cookies.jwt;
+    //we've verified cookie contains jwt -> clear cookie!
+    res.clearCookie(refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    try {
+      const result = await authenticationService.logout(refreshToken)(
+        async (refreshToken: string) =>
+          await Client.findOneOrFail({ token: refreshToken })
+      );
+
+      // clear found user's cookie
+      res.clearCookie(refreshToken, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
+      // res.sendStatus(204); // user logged out -> No content required!
+      res.status(201).json(result); // debug purposes!
     } catch (e: any) {
       next(e);
     }

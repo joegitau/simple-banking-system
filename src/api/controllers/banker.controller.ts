@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import Logger from '../../utils/logger';
 import BankerService from '../../api/services/banker.service';
-import { SuccessMessages } from '../../utils/helpers/success-messages';
+import { SuccessMessage } from '../../utils/helpers/success-messages';
 class BankerController {
   async createBanker(req: Request, res: Response, next: NextFunction) {
     try {
@@ -58,13 +58,10 @@ class BankerController {
       await BankerService.connectBankerToClient(bankerUuid, clientUuid);
 
       Logger.debug(
-        SuccessMessages.BANKER_CLIENT_CONNECTED(bankerUuid, clientUuid)
+        SuccessMessage.BANKER_CLIENT_CONNECTED(bankerUuid, clientUuid)
       );
       return res.json({
-        message: SuccessMessages.BANKER_CLIENT_CONNECTED(
-          bankerUuid,
-          clientUuid
-        ),
+        message: SuccessMessage.BANKER_CLIENT_CONNECTED(bankerUuid, clientUuid),
       });
     } catch (e: any) {
       next(e);

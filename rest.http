@@ -6,8 +6,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiN2M5NjA1N
 
 ### GET ALL CLIENTS (NEEDS AUTH)
 GET {{url}}/clients
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzRhNWY5MjUtMWQyYi00OWYyLTg3Y2EtZDA3YzMxYTIxN2JlIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY0NTMxMDE0OCwiZXhwIjoxNjQ1MzEwNDQ4fQ.CIIAktOeJmmp02ipV5zYrS0TR3oD8I6Wo3fi72zfLGA
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzRhNWY5MjUtMWQyYi00OWYyLTg3Y2EtZDA3YzMxYTIxN2JlIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY0NTM2MzMyMiwiZXhwIjoxNjQ1MzYzNjIyfQ.8cBF5ymvAioxb0YSympr_Y04jAfwSqu4qcVWt3Y0z40
 
 ### REGISTER CLIENTS
 POST {{url}}/clients
@@ -27,7 +26,7 @@ Content-Type: application/json
 
 
 ### LOGIN
-POST {{url}}/auth?user_type=client
+POST {{url}}/auth/login?user_type=client
 Content-Type: application/json
 
 {
@@ -36,8 +35,12 @@ Content-Type: application/json
 }
 
 
-###
+### REFRESH TOKEN
 GET {{url}}/auth/refresh-token
+
+
+### LOGOUT
+GET {{url}}/auth/logout?user_type=client
 
 
 ###
@@ -51,10 +54,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNjc0M2UwY
 }
 
 
-
 ###
 DELETE {{url}}/clients/e543a8fe-3f39-443e-8e94-745d88d456e8
-
 
 
 ###

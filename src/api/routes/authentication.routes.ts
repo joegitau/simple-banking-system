@@ -7,11 +7,12 @@ import authenticationController from '../../api/controllers/authentication.contr
 const route = Router();
 
 route.post(
-  '/',
+  '/login',
   validateRequest(userDTOResource),
-  authenticationController.redirectUser
+  authenticationController.redirectUserLogin
 );
 
 route.get('/refresh-token', authenticationController.setRefreshToken);
+route.get('/logout', authenticationController.redirectUserLogout);
 
 export default route;

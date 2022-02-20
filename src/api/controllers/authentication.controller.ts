@@ -3,16 +3,14 @@ import { Request, Response, NextFunction } from 'express';
 import JWTHelpers from '../jwt';
 import config from '../../config';
 import Logger from '../../utils/logger';
-import { UserEntity } from '../../types';
 import clientController from './client.controller';
 import bankerController from './banker.controller';
 import clientService from '../../api/services/client.service';
-import bankerService from '../../api/services/banker.service';
 import { ErrorHandler } from '../../utils/helpers/error-handler';
 import { ErrorMessage } from '../../utils/helpers/error-messages';
 
 class AuthenticationController {
-  redirectUser(req: Request, res: Response, next: NextFunction) {
+  redirectUserLogin(req: Request, res: Response, next: NextFunction) {
     if (req.query?.user_type === 'client') {
       Logger.info('::: Login client. :::');
       clientController.loginClient(req, res, next);
@@ -62,6 +60,17 @@ class AuthenticationController {
       );
     } catch (e: any) {
       next(e);
+    }
+  }
+
+  redirectUserLogout(req: Request, res: Response, next: NextFunction) {
+    if (req.query?.user_type === 'client') {
+      Logger.info('::: Logout client. :::');
+      clientController.logoutClient(req, res, next);
+    } else {
+      Logger.info('::: Logout banker. :::');
+      // FIXME: add logoutBanker within bankerController
+      // bankerController.logoutBanker; needs to be created!
     }
   }
 }

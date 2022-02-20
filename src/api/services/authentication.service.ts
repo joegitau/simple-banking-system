@@ -5,6 +5,7 @@ import JWTHelpers from '../../api/jwt';
 import { UserEntity } from '../../types';
 import { ErrorHandler } from '../../utils/helpers/error-handler';
 import { ErrorMessage } from '../../utils/helpers/error-messages';
+import { SuccessMessage } from '../../utils/helpers/success-messages';
 
 class AuthenticationService {
   private user: UserEntity;
@@ -34,6 +35,23 @@ class AuthenticationService {
       Reflect.deleteProperty(this.user, 'password');
 
       return { accessToken, refreshToken };
+    };
+  }
+
+  logout(refreshToken: string) {
+    return async (
+      finderUserFn: (refreshToken: string) => Promise<UserEntity>
+    ) => {
+      this.user = await finderUserFn(refreshToken);
+
+      // set user's token in DB to an empty string
+      this.user.token = '';
+      await this.user.save();
+
+      return {
+        message: SuccessMessage.USER_LOGGED_OUT,
+        lastname: this.user.lastname,
+      };
     };
   }
 }

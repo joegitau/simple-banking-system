@@ -32,6 +32,7 @@ class ClientController {
       res.cookie('jwt', result.refreshToken, {
         httpOnly: true,
         sameSite: 'none',
+        secure: true,
         maxAge: 24 * 60 * 60 * 1000, // eq. 1 day
       });
 
@@ -135,13 +136,20 @@ class ClientController {
     //we've verified cookie contains jwt -> clear cookie!
     res.clearCookie('jwt', {
       httpOnly: true,
+      sameSite: 'none',
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
 
     try {
       const client = await clientService.getClientByRefreshToken(refreshToken);
       if (!client) {
-        res.clearCookie('jwt', { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+        res.clearCookie('jwt', {
+          httpOnly: true,
+          sameSite: 'none',
+          secure: true,
+          maxAge: 24 * 60 * 60 * 1000,
+        });
         return res.sendStatus(204);
       }
 
@@ -151,6 +159,8 @@ class ClientController {
 
       res.clearCookie('jwt', {
         httpOnly: true,
+        sameSite: 'none',
+        secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
 

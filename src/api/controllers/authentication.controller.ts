@@ -29,7 +29,6 @@ class AuthenticationController {
     }
 
     const refreshToken = cookies.jwt;
-    Logger.debug('AUTH:: refreshToken %o', refreshToken);
 
     // find user associated with respective refreshToken
     // TODO: transform user to generic UserType (Client | Banker)

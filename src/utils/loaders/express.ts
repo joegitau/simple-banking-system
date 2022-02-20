@@ -9,8 +9,14 @@ import {
   handleError,
   handleNotFoundErr,
 } from '../../utils/helpers/error-handler';
+import { corsOptions } from '../../utils/helpers/allowed-origins';
+import CorsAccessCredentials from '../../api/middleware/cors-credentials';
 
 const expressLoader = (app: Application): void => {
+  app.use(CorsAccessCredentials);
+  // FIXME: add corsOptions
+  // app.use(cors(corsOptions));
+
   app.use(cors());
   app.use(express.json());
   app.use(cookieParser());

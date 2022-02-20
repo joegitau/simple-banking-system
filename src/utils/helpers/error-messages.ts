@@ -30,5 +30,6 @@ export const ErrorMessage = {
   UNAUTHORIZED: 'Forbidden.', // 401
   INTERNAL_SERVER_ERROR: 'Internal server error.', // 500
   CONFLICT: 'Conflict - as a result of a duplicate entry within Database.', // 409
-  JWT_TOKEN_NOT_FOUND: 'Jwt token not found within Request body.'
+  JWT_TOKEN_NOT_FOUND: 'Jwt token not found within Request body.',
+  NOT_ALLOWED_BY_CORS: 'Not allowed by CORS.',
 };

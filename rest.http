@@ -77,12 +77,12 @@ POST {{url}}/bankers
 Content-Type: application/json
 
 {
-  "firstname": "Xabi",
-  "lastname": "Alonso",
-  "email": "xabi@alonso.com",
+  "firstname": "Jamie",
+  "lastname": "Carragher",
+  "email": "jamie@carragher.com",
   "role": "banker",
   "password": "liverpool",
-  "employeeNumber": 2334589710
+  "employeeNumber": 2564589710
 }
 
 ### 

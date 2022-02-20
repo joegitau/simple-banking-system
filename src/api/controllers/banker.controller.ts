@@ -30,6 +30,7 @@ class BankerController {
       res.cookie('jwt', result.refreshToken, {
         httpOnly: true,
         sameSite: 'none',
+        secure: true,
         maxAge: 24 * 60 * 60 * 1000, // eq. 1 day
       });
 
@@ -117,6 +118,8 @@ class BankerController {
     // we've verified cookie contains jwt -> clear cookie!
     res.clearCookie('jwt', {
       httpOnly: true,
+      sameSite: 'none',
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -125,6 +128,8 @@ class BankerController {
       if (!banker) {
         res.clearCookie('jwt', {
           httpOnly: true,
+          sameSite: 'none',
+          secure: true,
           maxAge: 24 * 60 * 60 * 1000,
         });
         return res.sendStatus(204);
@@ -135,6 +140,8 @@ class BankerController {
 
       res.clearCookie('jwt', {
         httpOnly: true,
+        sameSite: 'none',
+        secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
 

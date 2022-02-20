@@ -27,8 +27,6 @@ class ClientController {
         password
       )(async (email) => await Client.findOneOrFail({ email }));
 
-      Logger.debug('Loging in Client, %o');
-
       // set refreshToken within res.cookie
       res.cookie('jwt', result.refreshToken, {
         httpOnly: true,

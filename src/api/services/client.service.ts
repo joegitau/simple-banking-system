@@ -2,7 +2,7 @@ import argon2 from 'argon2';
 import { createQueryBuilder, ObjectLiteral } from 'typeorm';
 
 import config from '../../config';
-import { JWTHelpers } from '../../api/jwt';
+import JWTHelpers from '../../api/jwt';
 import { Client } from '../entities/Client.entity';
 import { ServiceHelpers } from './common/service-helpers';
 import { ErrorHandler } from '../../utils/helpers/error-handler';
@@ -63,7 +63,7 @@ class ClientService {
     });
 
     // save refreshTokens with currentUser
-    client.tokens = client.tokens.concat(refreshToken);
+    client.token = refreshToken;
     await client.save();
 
     Reflect.deleteProperty(client, 'password');
@@ -85,7 +85,7 @@ class ClientService {
   }
 
   // prettier-ignore
-  async getCientAndTransactionsQB(options: SearchQueryOptions) {
+  async getCientAndTransactionsQB(options: SearchQueryOptions): Promise<Client> {
     return await createQueryBuilder('clients')
       .select('client')
       .from(Client, 'client')
@@ -93,6 +93,16 @@ class ClientService {
       .where('client.uuid = :uuid', { uuid: options.uuid })
       // .andWhere('transactions.type = :type', { type: options.transactionType })
       .getOneOrFail();
+  }
+
+  async getClientByRefreshToken(
+    rereshToken: string
+  ): Promise<Client | undefined> {
+    return await createQueryBuilder('clients')
+      .select('client')
+      .from(Client, 'client')
+      .where('client.token = :token', { token: rereshToken })
+      .getOne();
   }
 
   async updateClient(uuid: string, fields: ObjectLiteral): Promise<Client> {

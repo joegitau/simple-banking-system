@@ -28,33 +28,13 @@ class AuthenticationService {
         expiry: '1y',
       });
 
-      this.user.tokens = this.user.tokens.concat(refreshToken);
+      this.user.token = refreshToken;
       await this.user.save();
 
       Reflect.deleteProperty(this.user, 'password');
 
       return { accessToken, refreshToken };
     };
-  }
-
-  async setRefreshToken(refreshToken: string) {
-    JWTHelpers.verifyToken(
-      refreshToken,
-      { secret: config.REFRESH_TOKEN_SECRET },
-      (err: any, decoded: any) => {
-        if (err || this.user.uuid !== decoded) {
-          throw new ErrorHandler(403, ErrorMessage.INVALID_REFRESH_TOKEN);
-        }
-
-        // create a new accessToken
-        const newAccessToken = JWTHelpers.generateToken(this.user, {
-          secret: config.ACCESS_TOKEN_SECRET,
-          expiry: '300s',
-        });
-
-        return newAccessToken;
-      }
-    );
   }
 }
 

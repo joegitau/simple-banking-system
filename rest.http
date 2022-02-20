@@ -4,37 +4,40 @@ GET {{url}}/client/e0c4b8f7-368e-47c8-8fec-1fe094e6d118
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiN2M5NjA1NjktMDBiZi00ZDYyLWI3MjYtYTVhMjY3MTM0ODU5Iiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY0NTEzNzcwOSwiZXhwIjoxNjQ1MTM4MDA5fQ.AbuZryhHMk8mhw0Sb3Sq6a_IwmIPlw3BSIxDpROBeOQ
 
 
-### 
+### GET ALL CLIENTS (NEEDS AUTH)
 GET {{url}}/clients
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZjE0MTVjMTQtOWM2MS00NTQyLTk1ZDQtZTEzNTY3ZDA1MWNmIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjQ1MTM5MTg1LCJleHAiOjE2NDUxMzk0ODV9.nttyDtbtWuIU9jlKGG2CqWjIwIr_m0qDDUrbE1_r9RQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzRhNWY5MjUtMWQyYi00OWYyLTg3Y2EtZDA3YzMxYTIxN2JlIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY0NTMxMDE0OCwiZXhwIjoxNjQ1MzEwNDQ4fQ.CIIAktOeJmmp02ipV5zYrS0TR3oD8I6Wo3fi72zfLGA
 
 
-###
+### REGISTER CLIENTS
 POST {{url}}/clients
 Content-Type: application/json
 
 {
-  "firstname": "Virjil",
-  "lastname": "Van Dijk",
-  "email": "virgil@dijk.com",
+  "firstname": "sadio",
+  "lastname": "mane",
+  "email": "sadio@mane.com",
   "role": "client",
   "password": "liverpool",
-  "cardNumber": 77254507254,
+  "cardNumber": 55254507254,
   "balance": 1000,
   "hobbies": ["football", "drinking", "golf"]
 }
 
 
 
-###
+### LOGIN
 POST {{url}}/auth?user_type=client
 Content-Type: application/json
 
 {
-  "email": "jurgen@klopp.com",
+  "email": "sadio@mane.com",
   "password": "liverpool"
 }
 
+
+###
+GET {{url}}/auth/refresh-token
 
 
 ###

@@ -46,8 +46,9 @@ export abstract class Person extends BaseEntity {
   @Column({ default: true })
   active: boolean;
 
-  @Column('simple-array', { default: '' })
-  tokens: string[];
+  @Column({ nullable: true })
+  @IsString()
+  token: string;
 
   @CreateDateColumn()
   createdAt: Date;

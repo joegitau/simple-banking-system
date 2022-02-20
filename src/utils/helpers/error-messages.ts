@@ -27,6 +27,8 @@ export const ErrorMessage = {
   CURRENT_USER_ROLE_NOT_FOUND: 'Current user\'s role not defined.',
   USER_NOT_FOUND: 'User not found.',
   FORBIDDEN: 'Forbidden.',
-  INTERNAL_SERVER_ERROR: 'Internal server error.',
+  UNAUTHORIZED: 'Forbidden.', // 401
+  INTERNAL_SERVER_ERROR: 'Internal server error.', // 500
+  CONFLICT: 'Conflict - as a result of a duplicate entry within Database.', // 409
   JWT_TOKEN_NOT_FOUND: 'Jwt token not found within Request body.'
 };

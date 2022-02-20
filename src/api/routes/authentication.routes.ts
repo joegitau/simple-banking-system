@@ -12,6 +12,6 @@ route.post(
   authenticationController.redirectUser
 );
 
-// route.get('/refresh-token', authenticationController.setRefreshToken);
+route.get('/refresh-token', authenticationController.setRefreshToken);
 
 export default route;

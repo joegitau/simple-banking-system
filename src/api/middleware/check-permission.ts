@@ -12,7 +12,7 @@ const checkPermission =
   async (req: Request, _res: Response, next: NextFunction) => {
     try {
       const { uuid, role } = req.currentUser;
-      Logger.debug('Current user uuid %o', uuid);
+      Logger.debug('PERMS: CurrentUser %o', req.currentUser);
 
       if (!role) {
         throw new ErrorHandler(401, ErrorMessage.CURRENT_USER_ROLE_NOT_FOUND);

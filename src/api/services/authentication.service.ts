@@ -38,6 +38,7 @@ class AuthenticationService {
     };
   }
 
+  // currently not being used!
   logout(refreshToken: string) {
     return async (
       finderUserFn: (refreshToken: string) => Promise<UserEntity>

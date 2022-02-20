@@ -5,8 +5,8 @@ import { Client } from './Client.entity';
 
 @Entity('bankers')
 export class Banker extends Person {
-  @Column({ unique: true })
-  employeeNumber: string;
+  @Column({ unique: true, type: 'numeric' })
+  employeeNumber: number;
 
   @ManyToMany(() => Client)
   @JoinTable({

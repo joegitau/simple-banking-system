@@ -1,15 +1,23 @@
-import { DeepPartial, DeleteResult, ObjectLiteral } from 'typeorm';
+import { DeepPartial, DeleteResult } from 'typeorm';
 
 import Logger from '../../utils/logger';
 import ClientService from './client.service';
 import { Banker } from '../../api/entities/Banker.entity';
 import { ErrorMessage } from '../../utils/helpers/error-messages';
+import { ServiceHelpers } from './common/service-helpers';
 
 class BankerService {
-  async createBanker(input: ObjectLiteral): Promise<Banker> {
-    const banker = Banker.create(input);
+  async registerBanker(input: Banker): Promise<Banker> {
+    const hashedPassword = await ServiceHelpers.hashPassword(input);
+
+    const banker = Banker.create({
+      ...input,
+      password: hashedPassword,
+    });
 
     await banker.save();
+    Reflect.deleteProperty(banker, 'password');
+
     return banker;
   }
 
@@ -17,6 +25,12 @@ class BankerService {
     const banker = await Banker.findOneOrFail({ uuid });
 
     return banker;
+  }
+
+  async getBankerByRefreshToken(
+    refreshToken: string
+  ): Promise<Banker | undefined> {
+    return await Banker.findOne({ token: refreshToken });
   }
 
   async getBankers(): Promise<Banker[]> {

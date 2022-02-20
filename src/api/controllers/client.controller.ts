@@ -6,6 +6,7 @@ import { Client } from '../../api/entities/Client.entity';
 import { TransactionType } from '../../api/entities/Transaction.entity';
 import authenticationService from '../../api/services/authentication.service';
 import { SearchQueryOptions } from '../../api/services/common/query-builder-options';
+import clientService from '../services/client.service';
 
 class ClientController {
   async registerClient(req: Request, res: Response, next: NextFunction) {
@@ -132,25 +133,29 @@ class ClientController {
 
     const refreshToken = cookies.jwt;
     //we've verified cookie contains jwt -> clear cookie!
-    res.clearCookie(refreshToken, {
+    res.clearCookie('jwt', {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
 
     try {
-      const result = await authenticationService.logout(refreshToken)(
-        async (refreshToken: string) =>
-          await Client.findOneOrFail({ token: refreshToken })
-      );
+      const client = await clientService.getClientByRefreshToken(refreshToken);
+      if (!client) {
+        res.clearCookie('jwt', { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+        return res.sendStatus(204);
+      }
 
-      // clear found user's cookie
-      res.clearCookie(refreshToken, {
+      // delete refreshToken in DB
+      client.token = '';
+      const updatedClient = await client.save();
+
+      res.clearCookie('jwt', {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
 
-      // res.sendStatus(204); // user logged out -> No content required!
-      res.status(201).json(result); // debug purposes!
+      // res.sendStatus(204); // client logged out -> No content required!
+      res.status(201).json(updatedClient); // debug purposes!
     } catch (e: any) {
       next(e);
     }

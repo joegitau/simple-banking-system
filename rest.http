@@ -6,7 +6,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiN2M5NjA1N
 
 ### GET ALL CLIENTS (NEEDS AUTH)
 GET {{url}}/clients
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzRhNWY5MjUtMWQyYi00OWYyLTg3Y2EtZDA3YzMxYTIxN2JlIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY0NTM2MzMyMiwiZXhwIjoxNjQ1MzYzNjIyfQ.8cBF5ymvAioxb0YSympr_Y04jAfwSqu4qcVWt3Y0z40
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNzRhNWY5MjUtMWQyYi00OWYyLTg3Y2EtZDA3YzMxYTIxN2JlIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY0NTM5MjYwMCwiZXhwIjoxNjQ1MzkyOTAwfQ.ivW2vbLJK0Z8oIGpkKmacvlpXq2H7vaon5cf7tzlBdo
+
 
 ### REGISTER CLIENTS
 POST {{url}}/clients
@@ -22,7 +23,6 @@ Content-Type: application/json
   "balance": 1000,
   "hobbies": ["football", "drinking", "golf"]
 }
-
 
 
 ### LOGIN
@@ -58,7 +58,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNjc0M2UwY
 DELETE {{url}}/clients/e543a8fe-3f39-443e-8e94-745d88d456e8
 
 
-###
+### CREATE TRANSACTION
 POST {{url}}/clients/e543a8fe-3f39-443e-8e94-745d88d456e8/transactions
 Content-Type: application/json
 
@@ -68,6 +68,32 @@ Content-Type: application/json
   
 }
 
+################################
+## BANKER
+################################
+
+### REGISTER BANKERS
+POST {{url}}/bankers
+Content-Type: application/json
+
+{
+  "firstname": "Xabi",
+  "lastname": "Alonso",
+  "email": "xabi@alonso.com",
+  "role": "banker",
+  "password": "liverpool",
+  "employeeNumber": 2334589710
+}
 
 ### 
 GET {{url}}/bankers
+
+
+### LOGIN BANKER
+POST {{url}}/auth/login?user_type=banker
+Content-Type: application/json
+
+{
+  "email": "xabi@alonso.com",
+  "password": "liverpool"
+}

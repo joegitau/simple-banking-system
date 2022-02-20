@@ -5,10 +5,11 @@ import { Banker } from '../../api/entities/Banker.entity';
 import BankerService from '../../api/services/banker.service';
 import { SuccessMessage } from '../../utils/helpers/success-messages';
 import authenticationService from '../../api/services/authentication.service';
+import bankerService from '../../api/services/banker.service';
 class BankerController {
-  async createBanker(req: Request, res: Response, next: NextFunction) {
+  async registerBanker(req: Request, res: Response, next: NextFunction) {
     try {
-      const banker = await BankerService.createBanker(req.body);
+      const banker = await BankerService.registerBanker(req.body);
 
       Logger.debug('Created Banker with uuid: %o', banker?.uuid);
       return res.status(201).json(banker);
@@ -113,26 +114,32 @@ class BankerController {
     }
 
     const refreshToken = cookies.jwt;
-    //we've verified cookie contains jwt -> clear cookie!
-    res.clearCookie(refreshToken, {
+    // we've verified cookie contains jwt -> clear cookie!
+    res.clearCookie('jwt', {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
 
     try {
-      const result = await authenticationService.logout(refreshToken)(
-        async (refreshToken: string) =>
-          await Banker.findOneOrFail({ token: refreshToken })
-      );
+      const banker = await bankerService.getBankerByRefreshToken(refreshToken);
+      if (!banker) {
+        res.clearCookie('jwt', {
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000,
+        });
+        return res.sendStatus(204);
+      }
 
-      // clear found user's cookie
-      res.clearCookie(refreshToken, {
+      banker.token = '';
+      const updatedBanker = await banker.save();
+
+      res.clearCookie('jwt', {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
 
-      // res.sendStatus(204); // user logged out -> No content required!
-      res.status(201).json(result); // debug purposes!
+      // res.sendStatus(204); // banker logged out -> No content required!
+      res.status(201).json(updatedBanker); // debug purposes!
     } catch (e: any) {
       next(e);
     }

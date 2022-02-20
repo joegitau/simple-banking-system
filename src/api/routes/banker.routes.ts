@@ -6,7 +6,11 @@ import { checkPermission, isAuth, validateRequest } from '../../api/middleware';
 
 const route = Router();
 
-route.post('/', validateRequest(bankerResource), BankerController.createBanker);
+route.post(
+  '/',
+  validateRequest(bankerResource),
+  BankerController.registerBanker
+);
 route.get('/', isAuth, checkPermission('admin'), BankerController.getBankers);
 route.get(
   '/:uuid',

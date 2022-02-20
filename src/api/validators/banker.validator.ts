@@ -12,9 +12,7 @@ const bankerResource = object({
     active: boolean().optional(),
     employeeNumber: number({
       required_error: ErrorMessage.EMPLOYEE_NO_REQUIRED,
-    })
-      .min(10, ErrorMessage.EMPLOYEE_NO_MIN(10))
-      .max(10, ErrorMessage.EMPLOYEE_NO_MAX(10)),
+    }).min(10, ErrorMessage.EMPLOYEE_NO_MIN(10)),
   }),
 });
 

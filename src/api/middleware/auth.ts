@@ -23,7 +23,6 @@ const isAuth = (req: Request, res: Response, next: NextFunction) => {
       }
 
       // attach currentUser & role to decoded accessToken Payload
-      // decodedPayload => userInfo: { uuid: user.uuid, role: user.role },
       req.currentUser = decoded;
       // req.role = decoded.role; // not necessary?
 

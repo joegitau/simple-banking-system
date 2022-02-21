@@ -1,17 +1,20 @@
+import { getRepository } from 'typeorm';
 import { Request, Response, NextFunction } from 'express';
 
 import Logger from '../../utils/logger';
+import clientService from '../services/client.service';
 import ClientService from '../services/client.service';
 import { Client } from '../../api/entities/Client.entity';
 import { TransactionType } from '../../api/entities/Transaction.entity';
 import authenticationService from '../../api/services/authentication.service';
 import { SearchQueryOptions } from '../../api/services/common/query-builder-options';
-import clientService from '../services/client.service';
 
 class ClientController {
   async registerClient(req: Request, res: Response, next: NextFunction) {
     try {
-      const client = await ClientService.registerClient(req.body);
+      const client = await ClientService.create(req.body)(
+        getRepository(Client)
+      );
 
       Logger.debug('Created Client with uuid: %o', client.uuid);
       return res.status(201).json(client);
@@ -48,7 +51,7 @@ class ClientController {
     const { uuid } = req.params;
 
     try {
-      const client = await ClientService.getClientByUuid(uuid);
+      const client = await clientService.get(uuid)(getRepository(Client));
       return res.json(client);
     } catch (e: any) {
       next(e);
@@ -57,7 +60,7 @@ class ClientController {
 
   async getClients(_req: Request, res: Response, next: NextFunction) {
     try {
-      const clients = await ClientService.getClients();
+      const clients = await ClientService.getAll()(getRepository(Client));
       return res.json(clients);
     } catch (e: any) {
       next(e);

@@ -1,38 +1,34 @@
 import argon2 from 'argon2';
-import { createQueryBuilder, ObjectLiteral } from 'typeorm';
+import {
+  createQueryBuilder,
+  DeepPartial,
+  getRepository,
+  ObjectLiteral,
+  Repository,
+} from 'typeorm';
 
 import config from '../../config';
 import JWTHelpers from '../../api/jwt';
+import { UserEntity } from '../../types';
+import { CRUDService } from './CRUD.service';
 import { Client } from '../entities/Client.entity';
 import { ServiceHelpers } from './common/service-helpers';
 import { ErrorHandler } from '../../utils/helpers/error-handler';
 import { ErrorMessage } from '../../utils/helpers/error-messages';
 import { SearchQueryOptions } from './common/query-builder-options';
-class ClientService {
-  async getClientByUuid(uuid: string): Promise<Client> {
-    return await Client.findOneOrFail({ uuid });
-  }
+import { Banker } from '../entities/Banker.entity';
+import { Transaction } from '../entities/Transaction.entity';
+class ClientService extends CRUDService {
+  // override getAll(): (entity: Repository<UserEntity>) => Promise<UserEntity[]> {
+  //   return async (entity: Repository<UserEntity>) => {
+  //     entity = getRepository(Client);
 
-  async getClients(): Promise<Client[]> {
-    const clients = await Client.find();
-    clients.forEach((client) => Reflect.deleteProperty(client, 'password'));
+  //     const clients = await entity.find();
+  //     clients.forEach((client) => Reflect.deleteProperty(client, 'password'));
 
-    return clients;
-  }
-
-  async registerClient(input: Client): Promise<Client> {
-    const hashedPassword = await ServiceHelpers.hashPassword(input);
-
-    const client = Client.create({
-      ...input,
-      password: hashedPassword,
-    });
-
-    await client.save();
-    Reflect.deleteProperty(client, 'password');
-
-    return client;
-  }
+  //     return clients;
+  //   };
+  // }
 
   async loginClient(
     email: string,
@@ -115,7 +111,7 @@ class ClientService {
   }
 
   async deleteClient(uuid: string) {
-    const client = await this.getClientByUuid(uuid);
+    const client = await this.get(uuid)(getRepository(Client));
 
     return await Client.delete(client.id);
   }

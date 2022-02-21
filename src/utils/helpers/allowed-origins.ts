@@ -16,10 +16,14 @@ export const corsOptions: CorsOptions = {
     requestOrigin: string | undefined,
     callback: (err: Error | null, origin?: StaticOrigin) => void
   ) => {
-    if (allowedOrigins.includes(requestOrigin as string) || !requestOrigin) {
+    if (
+      allowedOrigins.indexOf(requestOrigin as string) !== -1 ||
+      !requestOrigin
+    ) {
       callback(null, true);
     }
 
     callback(new ErrorHandler(403, ErrorMessage.NOT_ALLOWED_BY_CORS));
   },
+  optionsSuccessStatus: 200,
 };

@@ -1,23 +1,8 @@
-import argon2 from 'argon2';
-import {
-  createQueryBuilder,
-  DeepPartial,
-  getRepository,
-  ObjectLiteral,
-  Repository,
-} from 'typeorm';
+import { createQueryBuilder, getRepository, ObjectLiteral } from 'typeorm';
 
-import config from '../../config';
-import JWTHelpers from '../../api/jwt';
-import { UserEntity } from '../../types';
 import { CRUDService } from './CRUD.service';
 import { Client } from '../entities/Client.entity';
-import { ServiceHelpers } from './common/service-helpers';
-import { ErrorHandler } from '../../utils/helpers/error-handler';
-import { ErrorMessage } from '../../utils/helpers/error-messages';
 import { SearchQueryOptions } from './common/query-builder-options';
-import { Banker } from '../entities/Banker.entity';
-import { Transaction } from '../entities/Transaction.entity';
 class ClientService extends CRUDService {
   // override getAll(): (entity: Repository<UserEntity>) => Promise<UserEntity[]> {
   //   return async (entity: Repository<UserEntity>) => {
@@ -29,43 +14,6 @@ class ClientService extends CRUDService {
   //     return clients;
   //   };
   // }
-
-  async loginClient(
-    email: string,
-    password: string
-  ): Promise<{
-    client: Client;
-    accessToken: string;
-    refreshToken: string;
-  }> {
-    const client = await Client.findOneOrFail({ email });
-
-    const validPassword = await argon2.verify(client.password, password);
-
-    if (!validPassword) {
-      throw new ErrorHandler(401, ErrorMessage.INVALID_EMAIL_PASSWORD);
-    }
-
-    const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = config;
-
-    const accessToken = JWTHelpers.generateToken(client, {
-      secret: ACCESS_TOKEN_SECRET,
-      expiry: '300s',
-    });
-
-    const refreshToken = JWTHelpers.generateToken(client, {
-      secret: REFRESH_TOKEN_SECRET,
-      expiry: '1d',
-    });
-
-    // save refreshTokens with currentUser
-    client.token = refreshToken;
-    await client.save();
-
-    Reflect.deleteProperty(client, 'password');
-
-    return { client, accessToken, refreshToken };
-  }
 
   //////////////////////////
   // advanced select queries

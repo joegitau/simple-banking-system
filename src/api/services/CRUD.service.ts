@@ -1,10 +1,11 @@
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 
 import { UserEntity } from '../../types';
 import { ServiceHelpers } from './common/service-helpers';
 
 export class CRUDService {
   private genericEntity: Repository<UserEntity>;
+  private user: UserEntity;
 
   // CREATE
   create(
@@ -34,7 +35,10 @@ export class CRUDService {
     return async (getEntity: Repository<UserEntity>) => {
       this.genericEntity = getEntity;
 
-      return await this.genericEntity.findOneOrFail({ uuid });
+      const entity = await this.genericEntity.findOneOrFail({ uuid });
+      Reflect.deleteProperty(entity, 'password');
+
+      return entity;
     };
   }
 
@@ -47,6 +51,26 @@ export class CRUDService {
       entities.forEach((entity) => Reflect.deleteProperty(entity, 'password'));
 
       return entities;
+    };
+  }
+
+  update(
+    uuid: string,
+    fields: DeepPartial<UserEntity>
+  ): (
+    getEntityFn: (uuid: string) => Promise<UserEntity>,
+    getEntity: Repository<UserEntity>
+  ) => Promise<UserEntity> {
+    return async (
+      getEntityFn: (uuid: string) => Promise<UserEntity>,
+      getEntity: Repository<UserEntity>
+    ) => {
+      this.genericEntity = getEntity;
+      this.user = await getEntityFn(uuid);
+
+      this.genericEntity.merge(this.user, fields);
+
+      return await this.genericEntity.save(this.user);
     };
   }
 }

@@ -22,4 +22,8 @@ export default {
   LOGS: {
     LEVEL: process.env.LOG_LEVEL || 'silly',
   },
+
+  // Redis
+  REDIS_PORT: Number(process.env.REDIS_PORT as string),
+  REDIS_HOST: process.env.REDIS_HOST as string,
 };

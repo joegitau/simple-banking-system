@@ -1,15 +1,18 @@
+import { getRepository } from 'typeorm';
 import { NextFunction, Request, Response } from 'express';
 
 import Logger from '../../utils/logger';
 import { Banker } from '../../api/entities/Banker.entity';
 import BankerService from '../../api/services/banker.service';
+import bankerService from '../../api/services/banker.service';
 import { SuccessMessage } from '../../utils/helpers/success-messages';
 import authenticationService from '../../api/services/authentication.service';
-import bankerService from '../../api/services/banker.service';
 class BankerController {
   async registerBanker(req: Request, res: Response, next: NextFunction) {
     try {
-      const banker = await BankerService.registerBanker(req.body);
+      const banker = await BankerService.create(req.body)(
+        getRepository(Banker)
+      );
 
       Logger.debug('Created Banker with uuid: %o', banker?.uuid);
       return res.status(201).json(banker);
@@ -46,7 +49,7 @@ class BankerController {
     const { uuid } = req.params;
 
     try {
-      const banker = await BankerService.getBankerByUuid(uuid);
+      const banker = await BankerService.get(uuid)(getRepository(Banker));
 
       return res.json(banker);
     } catch (e: any) {
@@ -54,9 +57,9 @@ class BankerController {
     }
   }
 
-  async getBankers(_: Request, res: Response, next: NextFunction) {
+  async getBankers(_req: Request, res: Response, next: NextFunction) {
     try {
-      const bankers = await BankerService.getBankers();
+      const bankers = await BankerService.getAll()(getRepository(Banker));
 
       return res.json(bankers);
     } catch (e: any) {
@@ -68,7 +71,10 @@ class BankerController {
     try {
       const { uuid } = req.params;
 
-      const updatedBanker = await BankerService.updateBanker(uuid, req.body);
+      const updatedBanker = await BankerService.update(uuid, req.body)(
+        async (uuid) => await Banker.findOneOrFail({ uuid }),
+        getRepository(Banker)
+      );
 
       Logger.debug('Updating Banker with uuid: %o', updatedBanker?.uuid);
       return res.json(updatedBanker);
@@ -99,7 +105,10 @@ class BankerController {
     const { uuid } = req.params;
 
     try {
-      const deleteResult = await BankerService.deleteBanker(uuid);
+      const deleteResult = await BankerService.delete(uuid)(
+        async (uuid) => await Banker.findOneOrFail({ uuid }),
+        getRepository(Banker)
+      );
 
       Logger.debug('Deleted Client with uuid: %o', uuid);
       return res.json(deleteResult);

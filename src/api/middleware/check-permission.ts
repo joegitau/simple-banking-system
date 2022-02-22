@@ -1,6 +1,9 @@
+import { getRepository } from 'typeorm';
 import { Request, Response, NextFunction } from 'express';
 
 import Logger from '../../utils/logger';
+import { Client } from '../entities/Client.entity';
+import { Banker } from '../entities/Banker.entity';
 import clientService from '../services/client.service';
 import { Role } from '../entities/common/Person.entity';
 import bankerService from '../../api/services/banker.service';
@@ -19,9 +22,9 @@ const checkPermission =
 
       let user;
       if (role === 'client') {
-        user = await clientService.getClientByUuid(uuid);
+        user = await clientService.get(uuid)(getRepository(Client));
       } else if (role === 'banker') {
-        user = await bankerService.getBankerByUuid(uuid);
+        user = await bankerService.get(uuid)(getRepository(Banker));
       }
 
       if (!user) {

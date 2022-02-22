@@ -107,7 +107,10 @@ class ClientController {
     const { uuid } = req.params;
 
     try {
-      const updatedClient = await ClientService.updateClient(uuid, req.body);
+      const updatedClient = await ClientService.update(uuid, req.body)(
+        async (uuid) => await Client.findOneOrFail({ uuid }),
+        getRepository(Client)
+      );
 
       Logger.debug('Updating Client with uuid: %o', updatedClient?.uuid);
       return res.json(updatedClient);
@@ -120,7 +123,10 @@ class ClientController {
     const { uuid } = req.params;
 
     try {
-      const deleteResult = await ClientService.deleteClient(uuid);
+      const deleteResult = await ClientService.delete(uuid)(
+        async (uuid) => await Client.findOneOrFail({ uuid }),
+        getRepository(Client)
+      );
 
       Logger.debug('Deleted Client with uuid: %o', uuid);
       return res.json(deleteResult);

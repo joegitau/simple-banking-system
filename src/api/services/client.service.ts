@@ -48,21 +48,6 @@ class ClientService extends CRUDService {
       .where('client.token = :token', { token: rereshToken })
       .getOne();
   }
-
-  async updateClient(uuid: string, fields: ObjectLiteral): Promise<Client> {
-    const client = await Client.findOneOrFail({ uuid });
-
-    Client.merge(client, fields);
-    const updatedClient = await Client.save(client);
-
-    return updatedClient;
-  }
-
-  async deleteClient(uuid: string) {
-    const client = await this.get(uuid)(getRepository(Client));
-
-    return await Client.delete(client.id);
-  }
 }
 
 export default new ClientService();

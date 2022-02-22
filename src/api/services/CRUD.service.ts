@@ -7,7 +7,6 @@ export class CRUDService {
   private genericEntity: Repository<UserEntity>;
   private user: UserEntity;
 
-  // CREATE
   create(
     input: UserEntity
   ): (getEntity: Repository<UserEntity>) => Promise<UserEntity> {
@@ -42,7 +41,6 @@ export class CRUDService {
     };
   }
 
-  // GET ALL
   getAll(): (getEntity: Repository<UserEntity>) => Promise<UserEntity[]> {
     return async (getEntity: Repository<UserEntity>) => {
       this.genericEntity = getEntity;
@@ -71,6 +69,23 @@ export class CRUDService {
       this.genericEntity.merge(this.user, fields);
 
       return await this.genericEntity.save(this.user);
+    };
+  }
+
+  delete(
+    uuid: string
+  ): (
+    findUserFn: (uuid: string) => Promise<UserEntity>,
+    getRepository: Repository<UserEntity>
+  ) => Promise<void> {
+    return async (
+      findUserFn: (uuid: string) => Promise<UserEntity>,
+      getRepository: Repository<UserEntity>
+    ) => {
+      this.genericEntity = getRepository;
+      this.user = await findUserFn(uuid);
+
+      this.genericEntity.delete(this.user.id);
     };
   }
 }

@@ -145,6 +145,7 @@ class ClientController {
         async (uuid) => await Client.findOneOrFail({ uuid }),
         getRepository(Client)
       );
+      await Cache.set(`client-${uuid}`, updatedClient);
 
       Logger.debug('Updating Client with uuid: %o', updatedClient?.uuid);
       return res.json(updatedClient);
@@ -161,6 +162,10 @@ class ClientController {
         async (uuid) => await Client.findOneOrFail({ uuid }),
         getRepository(Client)
       );
+
+      if (Cache.get(`client-${uuid}`) != null) {
+        await Cache.del(`client-${uuid}`);
+      }
 
       Logger.debug('Deleted Client with uuid: %o', uuid);
       return res.json(deleteResult);

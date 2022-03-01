@@ -1,4 +1,4 @@
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial, getConnection, Repository } from 'typeorm';
 
 import { UserEntity } from '../../types';
 import { ServiceHelpers } from './common/service-helpers';
@@ -14,6 +14,11 @@ export class CRUDService {
       this.genericEntity = getEntity;
 
       const hashPassword = await ServiceHelpers.hashPassword(input);
+
+      await getConnection().queryResultCache?.remove([
+        'clients_banker',
+        'clients_transactions',
+      ]);
 
       const entity = this.genericEntity.create({
         ...input,

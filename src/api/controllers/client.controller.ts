@@ -51,14 +51,8 @@ class ClientController {
     const { uuid } = req.params;
 
     try {
-      const cachedClient = await Cache.get(`client-${uuid}`);
-      if (cachedClient) {
-        return res.json(cachedClient);
-      }
-
       const client = await clientService.get(uuid)(getRepository(Client));
       Logger.info(`::: Caching client with uuid, ${uuid.slice(0, 5)} :::`);
-      await Cache.set(`client-${uuid}`, client);
 
       return res.json(client);
     } catch (e: any) {
@@ -68,14 +62,7 @@ class ClientController {
 
   async getClients(_req: Request, res: Response, next: NextFunction) {
     try {
-      const cachedClients = await Cache.get('clients');
-      if (cachedClients) {
-        return res.json(cachedClients);
-      }
-
       const clients = await ClientService.getAll()(getRepository(Client));
-      Logger.info('::: Caching clients... :::');
-      await Cache.set('clients', clients);
 
       return res.json(clients);
     } catch (e: any) {
@@ -95,18 +82,12 @@ class ClientController {
         transactionType: TransactionType.DEPOSIT,
       };
 
-      const cachedClient = await Cache.get(`clientTrans-${uuid}`);
-      if (cachedClient) {
-        return res.json(cachedClient);
-      }
-
       const client = await ClientService.getCientAndTransactionsQB(
         queryOptions
       );
       Logger.info(
-        `::: Caching clientTransaction with uuid, ${uuid.slice(0, 5)} :::`
+        `::: Caching clientTransaction with uuid, ${uuid.slice(0, 5)}... :::`
       );
-      await Cache.set(`clientTrans-${uuid}`, client);
 
       res.json(client);
     } catch (e: any) {
@@ -120,16 +101,10 @@ class ClientController {
       const { uuid } = req.params;
       const queryOptions: SearchQueryOptions = { uuid };
 
-      const cachedClient = await Cache.get(`clientBanker-${uuid}`);
-      if (cachedClient) {
-        return res.json(cachedClient);
-      }
-
       const client = await ClientService.getClientAndBankersQB(queryOptions);
       Logger.info(
         `::: Caching clientBanker with uuid, ${uuid.slice(0, 5)} :::`
       );
-      await Cache.set(`clientBanker-${uuid}`, client);
 
       res.json(client);
     } catch (e: any) {
@@ -145,7 +120,6 @@ class ClientController {
         async (uuid) => await Client.findOneOrFail({ uuid }),
         getRepository(Client)
       );
-      await Cache.set(`client-${uuid}`, updatedClient);
 
       Logger.debug('Updating Client with uuid: %o', updatedClient?.uuid);
       return res.json(updatedClient);
@@ -162,10 +136,6 @@ class ClientController {
         async (uuid) => await Client.findOneOrFail({ uuid }),
         getRepository(Client)
       );
-
-      if (Cache.get(`client-${uuid}`) != null) {
-        await Cache.del(`client-${uuid}`);
-      }
 
       Logger.debug('Deleted Client with uuid: %o', uuid);
       return res.json(deleteResult);

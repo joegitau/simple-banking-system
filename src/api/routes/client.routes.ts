@@ -19,13 +19,18 @@ route.get(
   ClientController.getClients
 );
 // route.get('/:uuid', checkPermission('client'), ClientController.getClient);
+// route.get(
+//   '/:uuid',
+//   isAuth,
+//   checkPermission('client'),
+//   ClientController.getClientAndTransactionsByQB
+// );
 route.get(
   '/:uuid',
   isAuth,
   checkPermission('client'),
   ClientController.getClientAndTransactionsByQB
 );
-// route.get('/:uuid', isAuth, checkPermission('client', 'admin'), ClientController.getClientBankersByQB);
 route.put(
   '/:uuid',
   isAuth,

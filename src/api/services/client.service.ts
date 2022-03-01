@@ -19,24 +19,29 @@ class ClientService extends CRUDService {
   // advanced select queries
   //////////////////////////
 
-  async getClientAndBankersQB(options: SearchQueryOptions): Promise<Client> {
+  async getClientAndBankersQB(
+    options: SearchQueryOptions
+  ): Promise<Client | undefined> {
     return await createQueryBuilder('clients')
       .select('client')
       .from(Client, 'client')
       .leftJoinAndSelect('client.bankers', 'bankers')
       .where('client.uuid = :uuid', { uuid: options.uuid })
-      .getOneOrFail();
+      .cache({ id: 'clients_bankers' })
+      .getOne();
   }
 
-  // prettier-ignore
-  async getCientAndTransactionsQB(options: SearchQueryOptions): Promise<Client> {
+  async getCientAndTransactionsQB(
+    options: SearchQueryOptions
+  ): Promise<Client | undefined> {
     return await createQueryBuilder('clients')
       .select('client')
       .from(Client, 'client')
       .leftJoinAndSelect('client.transactions', 'transactions')
       .where('client.uuid = :uuid', { uuid: options.uuid })
+      .cache({ id: 'clients_transactions' })
       // .andWhere('transactions.type = :type', { type: options.transactionType })
-      .getOneOrFail();
+      .getOne();
   }
 
   async getClientByRefreshToken(

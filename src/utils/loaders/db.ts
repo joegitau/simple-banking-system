@@ -1,4 +1,4 @@
-import { Connection, createConnection } from 'typeorm';
+import { createConnection } from 'typeorm';
 
 import { Transaction } from '../../api/entities/Transaction.entity';
 import { Client } from '../../api/entities/Client.entity';

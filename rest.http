@@ -14,14 +14,14 @@ POST {{url}}/clients
 Content-Type: application/json
 
 {
-  "firstname": "sadio",
-  "lastname": "mane",
-  "email": "sadio@mane.com",
+  "firstname": "Luis",
+  "lastname": "Diaz",
+  "email": "luis@diaz.com",
   "role": "client",
   "password": "liverpool",
-  "cardNumber": 55254507254,
+  "cardNumber": 55254507111,
   "balance": 1000,
-  "hobbies": ["football", "drinking", "golf"]
+  "hobbies": ["football", "dancing", "golf"]
 }
 
 

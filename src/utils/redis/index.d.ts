@@ -1,13 +1,13 @@
-import Redis from 'ioredis';
-import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
+// import Redis from 'ioredis';
+// import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
 
-import Logger from '../logger';
-import config from '../../config';
+// import Logger from '../logger';
+// import config from '../../config';
 
-const redis = new Redis({
-  port: config.REDIS_PORT,
-  host: config.REDIS_HOST,
-});
+// const redis = new Redis({
+//   port: config.REDIS_PORT,
+//   host: config.REDIS_HOST,
+// });
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // *
@@ -15,47 +15,47 @@ const redis = new Redis({
 // https://www.typescriptlang.org/docs/handbook/declaration-merging.html#module-augmentation
 // *
 /////////////////////////////////////////////////////////////////////////////////////////////
-declare module 'typeorm/query-builder/SelectQueryBuilder' {
-  interface SelectQueryBuilder<E> {
-    CustomGetOne(): Promise<E | undefined>;
+// declare module 'typeorm/query-builder/SelectQueryBuilder' {
+//   interface SelectQueryBuilder<E> {
+//     CustomGetOne(): Promise<E | undefined>;
 
-    CustomGetOneOrFail(): Promise<E>;
-  }
-}
+//     CustomGetOneOrFail(): Promise<E>;
+//   }
+// }
 
 // FIXME: entire monkey-patch needs to be re-written
 // furthermore, TypeORM ships with caching - though would be more ideal to integrate redis
 // prettier-ignore
-SelectQueryBuilder.prototype.CustomGetOne = async function <E>(): Promise< E | undefined> {
-  Logger.debug('Custom GetOne fn called!');
+// SelectQueryBuilder.prototype.CustomGetOne = async function <E>(): Promise< E | undefined> {
+//   Logger.debug('Custom GetOne fn called!');
   
-  const key = JSON.stringify(
-    Object.assign({}, this.getQuery(), { entity: this.alias })
-  );
-  Logger.info('Key %o', key);
+//   const key = JSON.stringify(
+//     Object.assign({}, this.getQuery(), { entity: this.alias })
+//   );
+//   Logger.info('Key %o', key);
 
-  const cached = await redis.get(key);
-  if (cached) {
-    return cached;
-  }
+//   const cached = await redis.get(key);
+//   if (cached) {
+//     return cached;
+//   }
 
-  const result = await this.getOne();
-  return result;
-};
+//   const result = await this.getOne();
+//   return result;
+// };
 
 // prettier-ignore
-SelectQueryBuilder.prototype.CustomGetOneOrFail = async function <E>(): Promise<E> {
-  const key = JSON.stringify(
-    Object.assign({}, this.getQuery(), { entity: this.alias })
-  );
-  Logger.info('Key %o', key);
+// SelectQueryBuilder.prototype.CustomGetOneOrFail = async function <E>(): Promise<E> {
+//   const key = JSON.stringify(
+//     Object.assign({}, this.getQuery(), { entity: this.alias })
+//   );
+//   Logger.info('Key %o', key);
 
-  Logger.debug('Custom GetOneOrFail fn called!');
-  Logger.debug('Entity Alias %o', this.alias);
-  Logger.debug('Query %o', this.getQuery());
+//   Logger.debug('Custom GetOneOrFail fn called!');
+//   Logger.debug('Entity Alias %o', this.alias);
+//   Logger.debug('Query %o', this.getQuery());
 
-  return this.getOneOrFail();
-};
+//   return this.getOneOrFail();
+// };
 
 // class Cache {
 //   private redis;

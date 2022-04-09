@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  postgres:
+    image: 'postgres:14.2-alpine'
+    container_name: postgres-banking-app
+    # restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'banking_app'
+  redis:
+    image: 'redis:6.2-alpine'
+    container_name: redis-banking-app
+    ports:
+      - 6379:6379
+  api:
+    build: .
+    container_name: api
+    ports:
+      - 5000:5000
+    volumes:
+      - ./:/app
+      - /app/node_modules

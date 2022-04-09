@@ -1,7 +1,6 @@
 import { getRepository } from 'typeorm';
 import { Request, Response, NextFunction } from 'express';
 
-import Cache from '../../utils/redis';
 import Logger from '../../utils/logger';
 import clientService from '../services/client.service';
 import ClientService from '../services/client.service';
